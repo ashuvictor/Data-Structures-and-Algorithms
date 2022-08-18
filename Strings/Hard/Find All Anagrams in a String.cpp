@@ -23,86 +23,49 @@ The substring with start index = 2 is "ab", which is an anagram of "ab".
 
 pproach 1: Brute Force (Finding all substrings of size (p) and cheacking if it is anagram or not)
 Status: TLE
-
 class Solution {
 public:
-    bool areAnagram(string str1, string str2)
-    {
-        sort(str1.begin(), str1.end());
-        for (int i=0;i<str1.size();i++)
-        {
-            if (str1[i]!=str2[i])
-            {
-                return false;
-            }
-        }
-        return true;
+    bool isAnagram(string s,string t){
+        sort(s.begin(),s.end());
+        sort(t.begin(),t.end());
+        return s==t;
     }
     vector<int> findAnagrams(string s, string p) {
-        vector<string> v;
-        vector<int> ans;
-        string k="";
-        for(int i=0;i<s.size();i++)
-        {
-            for(int j=i;j<i+p.size() && j<s.size();j++)
-            {
-                k+=s[j];
-            }
-            if(k.size()==p.size())
-            {
-                v.push_back(k);   
-            }
-            k="";
+        vector<int>idx;
+        int n=s.size();
+        int m=p.size();
+        for(int i=0;i<=n-m;i++){
+            string temp=s.substr(i,m);
+            if(isAnagram(temp,p))
+                idx.push_back(i);
         }
-        sort(p.begin(),p.end());
-        for(int i=0;i<v.size();i++)
-        {
-            if(areAnagram(v[i],p))
-            {
-                ans.push_back(i);
-            }
-        }
-        return ans;
+        return idx;
     }
 };
-Approach 2: Using Hash table
-Status: AC
-Credit: Youtube Channel Tech Dose
+
+
+
 
 class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
-        vector<int> ans;
-        vector<int> hash(26, 0);
-        vector<int> phash(26, 0);
-        int window = p.size();
-        int len = s.size();
-        if(len < window)
-        {
+    vector<int>ans;
+        if(p.size()>s.size())
             return ans;
+        vector<int>a(26,0);
+        vector<int>b(26,0);
+        for(int i=0;i<p.size();i++){
+            a[p[i]-'a']++;
+            b[s[i]-'a']++;
         }
-        int left = 0,right = 0;
-        while(right < window)
-        {
-            phash[p[right] - 'a'] += 1;
-            hash[s[right] - 'a'] += 1;
-            right++;
+        for(int i=p.size();i<s.size();i++){
+            if(a==b)
+                ans.push_back(i-p.size());
+            b[s[i-p.size()]-'a']--;
+            b[s[i]-'a']++;
         }
-        right -=1;
-        while(right < len)
-        {
-            if(phash == hash)
-            {
-                ans.push_back(left);
-            }
-            right+=1;
-            if(right != len)
-            {
-                hash[s[right] - 'a'] += 1;
-            }
-            hash[s[left] - 'a'] -=1 ;
-            left += 1;
-        }
+        if(a==b)
+            ans.push_back(s.size()-p.size());
         return ans;
     }
 };

@@ -15,38 +15,27 @@ Output: "fl"
 
 class Solution {
 public:
-	string longestCommonPrefix(vector<string>& strs) {
-		bool f = false;
-		int i;
-		for(i=0; i < strs[0].length();i++)
-		{
-			for(int k=1; k < strs.size(); k++)
-			{
-				if(i == strs[k].length() or strs[k][i] != strs[0][i]) f = true;
-			}
-			if(f) break;
-		}
-		string s = "";
-		for(int k = 0 ;k < i; k++) s += strs[0][k];
-		return s;
-
-	}
-};
-
-
-class Solution {
-public:
-string longestCommonPrefix(vector& strs) {
-sort(strs.begin(), strs.end());
-string res = strs.at(0);
-int len = res.length();
-for(int i = 1; i < strs.size(); i++){
-while(res.substr(0, len) != strs[i].substr(0, len))
-len--;
-if(len < 0)
-return "";
-res = res.substr(0, len);
-}
-return res;
-}
+    int minLen(vector<string>strs){
+        int ans=strs[0].length();
+        for(int i=1;i<strs.size();i++)
+        {
+            if(ans<strs[i].length())
+                ans=strs[i].length();
+        }
+        return ans;
+    }
+    string longestCommonPrefix(vector<string>& strs) {
+        int sz=minLen(strs);
+        string result="";
+        char current;
+        for(int i=0;i<sz;i++){
+            current=strs[0][i];
+            for(int j=0;j<strs.size();j++)
+            {
+                if(current!=strs[j][i])
+                    return result;
+            }
+        result.push_back(current);}
+        return result;
+    }
 };

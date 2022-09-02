@@ -22,52 +22,64 @@ acquire till the time you get the  and when you get all then start releasing til
 
 
 string minWindow(string s, string t) {
-int count =0;int start_idx=-1;
-int min_so_far=INT_MAX;
-int start=0;int window_size;
+        unordered_map<char, int> mp;
+        int n = s.size();
+        for(char i : t) mp[i]++;    // mantain count of each char of t
+        int i = 0, j = 0, mn = INT_MAX;
+        
+        int count = mp.size();
+        string ans = "";
+        
+        while(j < n){
+            if(mp.find(s[j]) != mp.end()) {     // if that char is found reduce it's count
+                mp[s[j]]--;
+                if(mp[s[j]] == 0) count--;     //if that char's count got to 0 then we've completely found one char so reduce var count
+            }
+            
+            while(count == 0){
+                if(mn > j-i+1){
+                    mn = min(mn, j-i+1);     // change min as found a valid canditate for ans
+                    ans = s.substr(i,j-i+1);
+                }
+                if(mp.find(s[i]) != mp.end()){    //optimize further and slide the window
+                    mp[s[i]]++;
+                    if(mp[s[i]]==1) count++;
+                }
+                i++;
+            }
+            j++;
+        }
+        return ans;
+    }
 
-    //now making our searing table by array
-    int ft[256]={0};//frequency list of t array
-    int fs[256]={0};//frequency list of s array
-    
-    //update frequency of t in ft
-    for(int i=0;i<t.length();i++){
-        ft[t[i]]++;
-    }
-    
-    //sliding window algorithm
-    for(int i=0;i<s.length();i++){
-        char ch=s[i];
-        fs[ch]++;
-        
-     //we will check how many characters matched till now in fs and ft
-        if(ft[ch]!=0 && fs[ch]<=ft[ch]){
-            count++;
+
+
+    GFG
+    class Solution{
+    public:
+    int findSubString(string str)
+    {
+        // Your code goes here   
+        set<char>st;
+        for(char ch:str)
+        st.insert(ch);
+         unordered_map<char,int>m;
+        int i=0,j=0;
+        int ans=str.size();
+        while(j<str.size())
+        {
+            m[str[j]]++;
+            if(m.size()==st.size())
+            {
+                while(m[str[i]]>1)
+                {
+                    m[str[i]]--;
+                    i++;
+                }
+                ans=min(ans,j-i+1);
+            }
+            j++;
         }
-        
-      //any point if string t length==count i.e all frequency we contain in fs
-      //start contraction
-        
-       if(count==t.length()){
-        //start removing from left if the character not present in t string 
-        //or frequency is higher than the required frequency
-         while(ft[s[start]]==0 || fs[s[start]]>ft[s[start]]){
-             fs[s[start]]--;
-             start++;
-         }
-           //note the window size
-        window_size=i-start+1;
-        if(window_size<min_so_far){
-            min_so_far=window_size;
-            start_idx=start;
-        }
-           
-      }
-        
-        
-        
+        return ans;
     }
-    if(start_idx==-1){return "";}
-    
-    return s.substr(start_idx,min_so_far);
-}
+};

@@ -15,39 +15,72 @@ Output:
 Explanation:
 The string can be segmented as "i like".
 
-
-unordered_map<string, int> dp;
-    
-    int solve(string a, vector<string> &b) {
-        int sz = a.length();
-        
-        if (sz == 0) return 1;
-        if (dp[a] != 0) return dp[a];
-        
-        for (int i=1; i<=sz; i++) {
-            int f = 0; 
-            string ss = a.substr(0, i);
-            
-            for (int j=0; j<b.size(); j++) {
-                
-                if (ss.compare(b[j]) == 0) {
-                    f = 1;
-                    break;
-                }
-            }
-            
-        	if (f==1 and solve (a.substr(i, sz-i), b) == 1) 		 return dp[a] = 1;
+bool wordBreak(string s, vector<string> &wordDict) {
+    int n = s.size();
+    set<string> d(wordDict.begin(), wordDict.end());
+    vector<bool> dp(n + 1, false);
+    dp[0] = true;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j < i; j++) {
+            string substr = s.substr(j, i - j);
+            dp[i] = dp[j] && d.count(substr);
+            if (dp[i])
+                break;
         }
-        
-        return dp[a] = -1;
-        
     }
-    
+    return dp[n];
+}
+u/ recursion //O(2^n)
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        set<string> st;
+        for(auto word:wordDict){
+            st.insert(word);
+        }
+        return f(0,s, st);
+    }
+    int f(int i, string& s, set<string>& st){
+        int n= s.size();
+        if(i==n)
+            return 1;
+        string temp;
+        for(int j=i; j<n; j++){
+            temp += s[j];
+            if(st.find(temp)!= st.end()){
+                if(f(j+1, s, st))
+                    return 1;
+            }
+        }
+        return 0;
+    }
+}; 
 
-    int wordBreak(string A, vector<string> &B) {
-        //code here
-        int x = solve(A, B);
-        
-        if (x == 1) return 1;
-        else return 0;
+// memoization  time->O(n)  space->O(n)+O(n)
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        set<string> st;
+        for(auto word:wordDict){
+            st.insert(word);
+        }
+        int n = s.size();
+        vector<int> dp(n,-1);
+        return f(0,s, st,dp);
     }
+    int f(int i, string& s, set<string>& st, vector<int>& dp){
+        int n= s.size();
+        if(i==n)
+            return 1;
+        if(dp[i]!=-1) return dp[i];
+        string temp;
+        for(int j=i; j<n; j++){
+            temp += s[j];
+            if(st.find(temp)!= st.end()){
+                if(f(j+1, s, st,dp))
+                    return dp[i] = 1;
+            }
+        }
+        return dp[i] = 0;
+    }
+}; 

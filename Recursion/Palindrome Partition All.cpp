@@ -3,34 +3,101 @@
 
 132. Palindrome Partitioning II
 
+every string can have maximum n-1 partition
 class Solution {
 public:
-	vector<int> dp;
-	int isPali(string &s,int l,int r){
-		while(l<r){
-			if(s[l++]!=s[r--]) return false;
-		}
-		return true;
-	}
-	int solve(string &s,int pos,int n){
-		if(pos>=n  || isPali(s,pos,n)) return 0;
-		if(dp[pos]!=-1) return dp[pos];
-		int ans=0,tmp=INT_MAX;
-		for(int i=pos;i<n;i++){
-			if(isPali(s,pos,i)){
-				ans=1+solve(s,i+1,n);
-				tmp=min(tmp,ans);
-			}
-		}
-		return dp[pos] = tmp;
-	}
-	int minCut(string s) {
-		dp.assign(s.size(),-1);
-		return solve(s,0,s.size())-1;
-	}
+    bool isPalin(int l,int r,string s)
+    {
+        while(l<r)
+        {
+            if(s[l]!=s[r])
+                return false;
+            l++,r--;
+        }
+        return true;
+    }
+    int solve(int i,int n,string &str){
+        if(i==n)
+            return 0;
+
+        int minCost=INT_MAX;
+        for(int j=i;j<str.size();j++){
+            if(isPalin(i,j,str))
+            {
+                int cost=1+solve(j+1,n,str);
+                minCost=min(minCost,cost);
+            }
+        }
+        return minCost;
+    }
+    int minCut(string s) {
+        int n=s.size();
+        return solve(0,n,s)-1;
+    }
 };
+class Solution {
+public:
+    bool isPalin(int l,int r,string &s)
+    {
+        while(l<r)
+        {
+            if(s[l]!=s[r])
+                return false;
+            l++,r--;
+        }
+        return true;
+    }
+    int solve(int i,int n,string &str,vector<int>&dp){
+        if(i>=n or isPalin(i,n,str))
+            return 0;
+if(dp[i]!=-1)
+    return dp[i];
+        int minCost=INT_MAX;
+        for(int j=i;j<n;j++){
+            if(isPalin(i,j,str))
+            {
+                int cost=1+solve(j+1,n,str,dp);
+                minCost=min(minCost,cost);
+            }
+        }
+        return dp[i]=minCost;
+    }
+    int minCut(string s) {
+        int n=s.size();
+        vector<int>dp(n,-1);
+        return solve(0,n,s,dp)-1;
+    }
+};
+class Solution {
+public:
+    bool isPalin(int l,int r,string &s)
+    {
+        while(l<r)
+        {
+            if(s[l]!=s[r])
+                return false;
+            l++,r--;
+        }
+        return true;
+    }
 
-
+    int minCut(string s) {
+        int n=s.size();
+        vector<int>dp(n+1,0);
+        int mincost=INT_MAX;
+       for(int i=n-1;i>=0;i--){
+           for(int j=i;j<n;j++){
+               if(isPalin(i,j,s))
+               {
+                   int cost=1+dp[j+1];
+                   mincost=min(cost,mincost);
+               }
+           }
+           dp[i]=mincost;
+       }
+        return dp[0];
+    }
+};
 1278. Palindrome Partitioning III
 
 class Solution {

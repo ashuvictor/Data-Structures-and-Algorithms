@@ -15,46 +15,51 @@ is root and it is greater than both its children.
 complete binary tree and node greater than the the chidren
 class Solution {
   public:
-  int TreeSize(Node* root)
-  {
+  int countNodes(Node* root){
       if(root==NULL)
-      return NULL;
-      return 1+TreeSize(root->left)+TreeSize(root->right);
+        return 0;
+    
+        int ans=1+countNodes(root->left)+countNodes(root->right);
+        return ans;
   }
-  int check(Node* root,int n,int index)
-  {
+  
+  bool isCBT(Node* root,int i,int n){
       if(root==NULL)
-      return 1;
-      if(index>=n)
-      return 0;
-      if((root->left and root->left->data >=root->data) or (root->right and root->right->data>=root->data))
-      return 0;
-      return check(root->left,n,2*index+1) and check(root->right,n,2*index+2);
-      
-  }
-    bool isHeap(struct Node* tree) {
-        // code here
-        if(tree==NULL)
         return true;
-        int n=TreeSize(tree);
-        int index=0;
-        if(check(tree,n,index))
-        return true;
+    
+        if(i>=n)
         return false;
+        
+        bool left=isCBT(root->left,2*i+1,n);
+        bool right=isCBT(root->right,2*i+2,n);
+        return (left&right);
+          
+           
+  }
+  
+  bool maxHeap(struct Node* root){
+     if(root->left==NULL && root->right==NULL)
+     return true;
+    
+    if(root->right==NULL)
+    return(root->data>root->left->data);
+    
+    bool left=maxHeap(root->left);
+    bool right=maxHeap(root->right);
+    
+    if(left && right && root->data>root->left->data && root->data>root->right->data)
+    return true;
+    
+    else
+    return false;
+  }
+  
+    bool isHeap(struct Node* root) {
+        int n=countNodes(root);
+        int index=0;
+        if(isCBT(root,index,n) && maxHeap(root))
+            return true;
+        else
+            return false;
     }
 };
-
-bool isHeap(struct Node* root) {
-        // code here
-        if (!root || (!root->left && !root->right))
-            return true;
-        else if (root->right && !root->left)
-            return false;
-        else if (root->right && root->right->left && !root->left->right)
-            return false;
-        if (root->left->data > root->data)
-            return false;
-        if (root->right && root->right->data > root->data)
-            return false;
-        return isHeap(root->left) && isHeap(root->right);
-    }

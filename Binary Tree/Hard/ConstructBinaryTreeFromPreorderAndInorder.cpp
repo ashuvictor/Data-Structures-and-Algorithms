@@ -2,25 +2,27 @@ Given two integer arrays preorder and inorder where preorder is the preorder tra
 inorder is the inorder traversal of the same tree, construct and return the binary tree.
 https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
 
-class Solution {
-public:
-    TreeNode* build(vector<int>& preorder, int preStart, int preEnd, vector<int>& inorder, int inStart, int inEnd, map<int, int> &inMap)
-    {
-        if(preStart>preEnd or inStart>inEnd)
-            return NULL;
-        TreeNode* root=new TreeNode(preorder[preStart]);
-        int inRoot=inMap[root->val];
-        int numsleft=inRoot-inStart;
-        root->left=build(preorder,preStart+1,preStart+numsleft,inorder,inStart,inRoot-1,inMap);
-            root->right = build(preorder, preStart + numsleft + 1, preEnd, inorder, inRoot + 1, inEnd, inMap);
-
-        return root;
-    }
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        map<int,int>inMap;
-        for(int i=0;i<inorder.size();i++)
-            inMap[inorder[i]]=i;
-        TreeNode *root=build(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1,inMap);
-        return root;
-    }
-};
+int findIndex(vector<int> &inorder, int i, int j, int val)
+{
+    for (auto b = i; b<=j; ++b)
+        if (inorder[b]==val)
+            return b;
+}
+TreeNode* makeTree(vector<int> &preorder, vector<int> &inorder, int i, int j, int& p)
+{
+    if (i>j)
+        return NULL;
+    TreeNode* node = new TreeNode(preorder[p++]);
+    if (i==j)
+        return node;
+    int in = findIndex(inorder, i, j, node->val);
+    node->left = makeTree(preorder, inorder, i, in-1, p);
+    node->right = makeTree(preorder, inorder, in+1, j, p);
+    return node;
+}
+TreeNode* Solution::buildTree(vector<int> &preorder, vector<int> &inorder) {
+    if (preorder.empty() || inorder.empty())
+        return NULL;
+    int p = 0;
+    return makeTree(preorder, inorder, 0, inorder.size()-1, p);
+}

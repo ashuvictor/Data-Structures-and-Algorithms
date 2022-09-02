@@ -15,30 +15,53 @@ countAndSay(2) = say "1" = one 1 = "11"
 countAndSay(3) = say "11" = two 1's = "21"
 countAndSay(4) = say "21" = one 2 + one 1 = "12" + "11" = "1211"
 
-class Solution {
-public:
-     string countAndSay(int n) {
-        if(n==1)
-		return "1";
-		 if(n==2)
-		return "11";
-string s="11";
-for(int i=3;i<=n;i++){
-	string t="";
-	s=s+'&'; // use of delimiter
-	int c=1;
 
-	for(int j=1;j<s.length();j++){
-		if(s[j]!=s[j-1]){
-			t=t+to_string(c);
-			t=t+s[j-1];
-			c=1;
-		}
-		else 
-		c++;
-	}
-	s=t;
-}
-return s;
+
+string solve(string s){
+    int n = s.size();
+    int i = 0;
+    int j = 0;
+    int cnt = 0;
+    string ans = "";
+    while(i<n){
+        j = i;
+        cnt = 1;
+        while(i<n and s[i]==s[i+1]){
+            i++;
+            cnt++;
+        }
+        ans += (cnt+'0');
+        ans += s[j];    
+        i++;
     }
-};
+    return ans;
+}
+
+string countAndSay(int n) {
+    string s = "1";
+    n--;
+    while(n--){
+        s = solve(s);
+    }
+    return s;
+}
+
+
+string countAndSay(int n) {
+        if(n==1)
+            return "1";
+        string s=countAndSay(n-1);
+        int k=1;
+        string ans="";
+        for(int i=0;i<s.length();i++)
+        {
+            if(s[i]!=s[i+1])
+            {
+                ans+= (k+'0');
+                ans+=s[i];
+                k=0;
+            }
+            k++;
+        }
+        return ans;
+    }

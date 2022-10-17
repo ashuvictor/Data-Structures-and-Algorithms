@@ -3,6 +3,42 @@
 
 agar mini se bada toh normal value
 and agar chota then it is encrypted value
+class MinStack {
+public:
+    stack<pair<int,int>>st;
+    MinStack() {
+        
+    }
+    
+    void push(int val) {
+        if(st.empty())
+        {
+            st.push({val,val});
+        }
+        else
+        {
+            st.push({val,min(st.top().second,val)});
+        }
+    }
+    
+    void pop() {
+        if(!st.empty());
+        st.pop();
+    }
+    
+    int top() {
+     return st.top().first;   
+    }
+    
+    int getMin() {
+        return st.top().second;
+    }
+};
+
+
+
+
+
 #include<stack>
 #include<limits.h>
 class SpecialStack {

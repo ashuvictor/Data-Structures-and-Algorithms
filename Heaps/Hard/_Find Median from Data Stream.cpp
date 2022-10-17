@@ -8,6 +8,32 @@ MedianFinder() initializes the MedianFinder object.
 void addNum(int num) adds the integer num from the data stream to the data structure.
 double findMedian() returns the median of all elements so far. Answers within 10-5 of the actual answer will be accepted.
 https://leetcode.com/problems/find-median-from-data-stream/
+
+class MedianFinder {
+public:
+    priority_queue<int> maxHeap;
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    
+    MedianFinder() {
+    }
+    void addNum(int num) {
+        maxHeap.push(num);
+        minHeap.push(maxHeap.top());
+        maxHeap.pop();
+        if (minHeap.size() > maxHeap.size()) {
+            maxHeap.push(minHeap.top());
+            minHeap.pop();
+        }
+    }
+    double findMedian() {
+        if (maxHeap.size() > minHeap.size()) return maxHeap.top();
+        return (maxHeap.top() + minHeap.top()) / 2.0;
+    }
+};
+
+
+
+
 class MedianFinder {
 public:
     priority_queue<int>maxheap;

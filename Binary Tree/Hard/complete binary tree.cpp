@@ -1,5 +1,26 @@
 
-
+class Solution{
+public:    
+int countNodes(Node* root){
+    if(root==NULL)
+    return 0;
+    return countNodes(root->left)+countNodes(root->right)+1;
+}
+bool solve(Node* root,int i,int n){
+    if(root==NULL)
+    return true;
+    if(i>=n)
+    return false;
+    bool l=solve(root->left,2*i+1,n);
+    bool r=solve(root->right,2*i+2,n);
+    return l && r;
+}
+    bool isCompleteBT(Node* root){
+        //code here
+        int n=countNodes(root);
+        return solve(root,0,n);
+    }
+};
 class Solution{
 public:    
    bool isCompleteBT(Node* root){

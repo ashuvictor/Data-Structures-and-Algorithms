@@ -23,7 +23,7 @@ public:
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
- if(head==NULL and head->next==NULL)
+ if(head==NULL or head->next==NULL)
  return head;
  ListNode* newHead=reverseList(head->next);
  head->next->next=head;

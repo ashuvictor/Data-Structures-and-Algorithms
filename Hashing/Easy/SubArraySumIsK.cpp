@@ -13,9 +13,9 @@ public:
             sum+=nums[i];
             if(mp.find(sum-k)!=mp.end())
             ans+=mp[sum-k];
-            else{
+
                 mp[sum]++;
-            }
+ 
         }
         return ans;
 

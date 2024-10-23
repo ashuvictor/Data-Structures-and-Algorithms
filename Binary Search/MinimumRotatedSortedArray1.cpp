@@ -21,20 +21,20 @@ https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 class Solution {
 public:
     int findMin(vector<int>& nums) {
-        if(nums.size()==1)
+        int n = nums.size();
+        if (n == 1)
             return nums[0];
-        int low=0;
-        int high=nums.size()-1;
-        if(nums[low]<nums[high])
-            return nums[low];
-        int ans=INT_MAX;
-        while(low<=high){
-            int mid=low+(high-low)/2;
-            if(nums[mid]>=nums[0])
-                low=mid+1;  //we are in the part which does not have our element
-            else{
-                ans=min(ans,nums[mid]);
-                high=mid-1;
+        int low = 0;
+        int high = n - 1;
+        int ans = INT_MAX;
+        while (low <= high) {
+            int mid = (low + high) >> 1;
+            if (nums[mid] >= nums[low]) {
+                ans = min(ans, nums[low]);
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+                ans = min(ans, nums[mid]);
             }
         }
         return ans;

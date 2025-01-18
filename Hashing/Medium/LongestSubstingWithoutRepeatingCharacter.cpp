@@ -24,3 +24,40 @@ public:
         return len;
     }
 };
+
+
+#include <iostream>
+#include <unordered_set>
+#include <string>
+using namespace std;
+
+int lengthOfLongestSubstring(string s) {
+    unordered_set<char> charSet;
+    int left = 0, maxLength = 0;
+
+    for (int right = 0; right < s.size(); ++right) {
+        // If character is already in the set, move the left pointer
+        while (charSet.find(s[right]) != charSet.end()) {
+            charSet.erase(s[left]);
+            ++left;
+        }
+        // Add the current character to the set
+        charSet.insert(s[right]);
+        // Update the maximum length
+        maxLength = max(maxLength, right - left + 1);
+    }
+
+    return maxLength;
+}
+
+int main() {
+    string s1 = "abcabcbb";
+    string s2 = "bbbbb";
+    string s3 = "pwwkew";
+
+    cout << "Example 1: " << lengthOfLongestSubstring(s1) << endl; // Output: 3
+    cout << "Example 2: " << lengthOfLongestSubstring(s2) << endl; // Output: 1
+    cout << "Example 3: " << lengthOfLongestSubstring(s3) << endl; // Output: 3
+
+    return 0;
+}

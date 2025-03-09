@@ -1,6 +1,42 @@
  /*Implementing Dijkstra Algorithm
  https://practice.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1/?page=1&difficulty[]=1&category[]=Graph&sortBy=submissions
  */
+vector<int> dijkstra(vector<vector<pair<int, int>>> &adj, int src) {
+    int V = adj.size();
+    // Initialize distance vector and set source distance to 0
+    vector<int> dist(V, INT_MAX);
+    dist[src] = 0;
+
+    // Priority queue to pick the vertex with the smallest distance
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    pq.push({0, src});
+
+    while (!pq.empty()) {
+        int curr_node = pq.top().second;
+        int curr_dist = pq.top().first;
+        pq.pop();
+
+        // Optional: Skip processing if we have an outdated distance
+        if (curr_dist > dist[curr_node])
+            continue;
+
+        for (auto x : adj[curr_node]) {
+            // Use .first and .second to access the pair's elements
+            int next_node = x.first;
+            int weight = x.second;
+            if (curr_dist + weight < dist[next_node]) {
+                dist[next_node] = curr_dist + weight;
+                pq.push({dist[next_node], next_node});
+            }
+        }
+    }
+    return dist;
+}
+
+
+
+
+
   vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
     {
         priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;

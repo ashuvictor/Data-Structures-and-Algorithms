@@ -21,3 +21,36 @@
         return dist;
     }
 };
+
+
+vector<int> dijkstra(int V, vector<vector<int>> adj[], int S) {
+    // Using a set to store pairs of {distance, vertex}
+    set<pair<int,int>> st;
+    vector<int> dist(V, INT_MAX);
+    dist[S] = 0;
+    st.insert({0, S});
+    
+    while (!st.empty()){
+        // Get the vertex with the smallest distance
+        auto it = st.begin();
+        int curr_dist = it->first;
+        int curr_node = it->second;
+        st.erase(it);
+        
+        // Check all adjacent nodes of the current node
+        for(auto x : adj[curr_node]){
+            int next_node = x[0];
+            int weight = x[1];
+            if(curr_dist + weight < dist[next_node]){
+                // If next_node already has a distance value, remove it from the set
+                if(dist[next_node] != INT_MAX) {
+                    st.erase({dist[next_node], next_node});
+                }
+                // Update distance and insert new pair into the set
+                dist[next_node] = curr_dist + weight;
+                st.insert({dist[next_node], next_node});
+            }
+        }
+    }
+    return dist;
+}

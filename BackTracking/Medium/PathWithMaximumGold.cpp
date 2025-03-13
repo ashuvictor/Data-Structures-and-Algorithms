@@ -28,3 +28,41 @@ public:
         return ans;
     }
 };
+
+
+
+
+class Solution {
+public:
+    int solve(vector<vector<int>>& grid, int i, int j) {
+        if (i < 0 || i >= grid.size() || j < 0 || j >= grid[0].size() || grid[i][j] == 0)
+            return 0;
+        
+        int current = grid[i][j];
+        grid[i][j] = 0; // Mark as visited
+        
+        // Possible moves (right, down, left, up)
+        vector<pair<int, int>> directions = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+        
+        int maxGold = 0;
+        for (auto [di, dj] : directions) {
+            maxGold = max(maxGold, solve(grid, i + di, j + dj));
+        }
+        
+        grid[i][j] = current; // Restore the cell (Backtracking)
+        return current + maxGold;
+    }
+
+    int getMaximumGold(vector<vector<int>>& grid) {
+        int ans = 0, row = grid.size(), col = grid[0].size();
+        
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (grid[i][j] > 0) {
+                    ans = max(ans, solve(grid, i, j));
+                }
+            }
+        }
+        return ans;
+    }
+};

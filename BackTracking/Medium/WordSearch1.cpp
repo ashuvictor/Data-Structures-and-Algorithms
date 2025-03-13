@@ -37,3 +37,42 @@ public:
        return false;
     }
 };
+
+
+class Solution {
+public:
+    bool solve(vector<vector<char>>& mat, string& word, int i, int j, int index) {
+        // Base case: if we have found the entire word
+        if (index == word.size()) return true;
+
+        // Check boundaries and character match
+        if (i < 0 || i >= mat.size() || j < 0 || j >= mat[0].size() || mat[i][j] != word[index]) {
+            return false;
+        }
+
+        // Mark the current cell as visited
+        char temp = mat[i][j];
+        mat[i][j] = '*';
+
+        // Explore all four possible directions
+        bool isFound = solve(mat, word, i + 1, j, index + 1) ||
+                       solve(mat, word, i - 1, j, index + 1) ||
+                       solve(mat, word, i, j + 1, index + 1) ||
+                       solve(mat, word, i, j - 1, index + 1);
+
+        // Restore the character (backtracking)
+        mat[i][j] = temp;
+
+        return isFound;
+    }
+
+    bool isWordExist(vector<vector<char>>& mat, string word) {
+        for (int i = 0; i < mat.size(); i++) {
+            for (int j = 0; j < mat[0].size(); j++) {
+                if (solve(mat, word, i, j, 0))  // Start DFS search from (i, j)
+                    return true;
+            }
+        }
+        return false;
+    }
+};

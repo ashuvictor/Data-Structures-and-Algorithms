@@ -69,3 +69,63 @@ class Solution
        return len;
     }
 };
+
+
+
+
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    // Function to find unit area of the largest region of 1s using BFS
+    bool isvalid(int x, int y, int row, int col, vector<vector<int>>& grid, vector<vector<bool>>& vis) {
+        return (x >= 0 && x < row && y >= 0 && y < col && !vis[x][y] && grid[x][y] == 1);
+    }
+    
+    void bfs(int x, int y, int row, int col, vector<vector<int>>& grid, vector<vector<bool>>& vis, int &cnt) {
+        queue<pair<int, int>> q;
+        q.push({x, y});
+        vis[x][y] = true;
+        cnt++;
+        
+        int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+        
+        while (!q.empty()) {
+            auto [cx, cy] = q.front();
+            q.pop();
+            
+            for (int i = 0; i < 8; i++) {
+                int nx = cx + dx[i];
+                int ny = cy + dy[i];
+                
+                if (isvalid(nx, ny, row, col, grid, vis)) {
+                    q.push({nx, ny});
+                    vis[nx][ny] = true;
+                    cnt++;
+                }
+            }
+        }
+    }
+    
+    int findMaxArea(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        int len = 0;
+        vector<vector<bool>> vis(row, vector<bool>(col, false));
+        
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (grid[i][j] == 1 && !vis[i][j]) {
+                    int cnt = 0;
+                    bfs(i, j, row, col, grid, vis, cnt);
+                    len = max(cnt, len);
+                }
+            }
+        }
+        return len;
+    }
+};

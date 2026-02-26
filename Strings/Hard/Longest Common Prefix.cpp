@@ -13,29 +13,56 @@ Input: strs = ["flower","flow","flight"]
 Output: "fl"
 
 
+import java.util.*;
+
 class Solution {
-public:
-    int minLen(vector<string>strs){
-        int ans=strs[0].length();
-        for(int i=1;i<strs.size();i++)
-        {
-            if(ans<strs[i].length())
-                ans=strs[i].length();
+
+    private int minLen(String[] strs) {
+        int ans = strs[0].length();
+
+        for (int i = 1; i < strs.length; i++) {
+            ans = Math.min(ans, strs[i].length());
         }
+
         return ans;
     }
-    string longestCommonPrefix(vector<string>& strs) {
-        int sz=minLen(strs);
-        string result="";
-        char current;
-        for(int i=0;i<sz;i++){
-            current=strs[0][i];
-            for(int j=0;j<strs.size();j++)
-            {
-                if(current!=strs[j][i])
-                    return result;
+
+    public String longestCommonPrefix(String[] strs) {
+        int sz = minLen(strs);
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < sz; i++) {
+            char current = strs[0].charAt(i);
+
+            for (int j = 0; j < strs.length; j++) {
+                if (strs[j].charAt(i) != current)
+                    return result.toString();
             }
-        result.push_back(current);}
-        return result;
+
+            result.append(current);
+        }
+
+        return result.toString();
     }
-};
+}
+
+
+
+BEST
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if (strs.length == 0) return "";
+
+        for (int i = 0; i < strs[0].length(); i++) {
+            char c = strs[0].charAt(i);
+
+            for (int j = 1; j < strs.length; j++) {
+                if (i == strs[j].length() || strs[j].charAt(i) != c) {
+                    return strs[0].substring(0, i);
+                }
+            }
+        }
+
+        return strs[0];
+    }
+}

@@ -2,71 +2,73 @@
 https://techiedelight.com/practice/?problem=MaximumLengthSubarray
 
 */
-method1 
-void findMaxLenSubarray(int nums[], int n, int S)
-{
-    // `len` stores the maximum length of subarray with sum `S`
-    int len = 0;
- 
-    // stores ending index of the maximum length subarray having sum `S`
-    int ending_index = -1;
- 
-    // consider all subarrays starting from `i`
-    for (int i = 0; i < n; i++)
-    {
-        int target = 0;
- 
-        // consider all subarrays ending at `j`
-        for (int j = i; j < n; j++)
-        {
-            // sum of elements in the current subarray
-            target += nums[j];
- 
-            // if we have found a subarray with sum `S`
-            if (target == S)
-            {
-                // update length and ending index of max length subarray
-                if (len < j - i + 1)
-                {
-                    len = j - i + 1;
-                    ending_index = j;
+class Solution {
+    public void findMaxLenSubarray(int[] nums, int S) {
+        int n = nums.length;
+
+        int len = 0;
+        int endingIndex = -1;
+
+        // All starting points
+        for (int i = 0; i < n; i++) {
+            int target = 0;
+
+            // All ending points
+            for (int j = i; j < n; j++) {
+                target += nums[j];
+
+                if (target == S) {
+                    if (len < j - i + 1) {
+                        len = j - i + 1;
+                        endingIndex = j;
+                    }
                 }
             }
         }
+
+        if (endingIndex == -1) {
+            System.out.println("No subarray found");
+        } else {
+            System.out.println("[" + (endingIndex - len + 1) + ", " + endingIndex + "]");
+        }
     }
- 
-    // print the subarray
-    printf("[%d, %d]", ending_index - len + 1, ending_index);
 }
 METHOD 2
-class Solution
-{
-public:
-	vector<int> findMaxLenSubarray(vector<int> const &nums, int target)
-	{
-		// Write your code here...
-		vector<int>ans;
-		int ending=-1;
-		unordered_map<int,int>map;
-		map[0]=-1;
-		int sum=0;int len=0;
-		for(int i=0;i<nums.size();i++){
-			sum+=nums[i];
-			if(map.find(sum)==map.end())
-			map[sum]=i;
-             // if the sum is seen for the first time, insert the sum with its
-        // into the map
-			if(map.find(sum-target)!=map.end() and len<i-map[sum-target])
-			{
-				len=i-map[sum-target];
-				ending=i;
-			}
-		}
-		if(ending!=-1)
-		{
-			for(int i=ending-len+1;i<=ending;i++)
-			ans.push_back(nums[i]);
-		}
-		return ans;
-	}
-};
+import java.util.*;
+
+class Solution {
+    public void findMaxLenSubarray(int[] nums, int S) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int sum = 0;
+        int maxLen = 0;
+        int endIndex = -1;
+
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+
+            // Case 1: whole array till i
+            if (sum == S) {
+                maxLen = i + 1;
+                endIndex = i;
+            }
+
+            // Case 2: prefix seen before
+            if (map.containsKey(sum - S)) {
+                int start = map.get(sum - S) + 1;
+                int len = i - map.get(sum - S);
+                if (len > maxLen) {
+                    maxLen = len;
+                    endIndex = i;
+                }
+            }
+
+            // Store first occurrence only
+            map.putIfAbsent(sum, i);
+        }
+
+        if (endIndex == -1)
+            System.out.println("No subarray found");
+        else
+            System.out.println("[" + (endIndex - maxLen + 1) + ", " + endIndex + "]");
+    }
+}

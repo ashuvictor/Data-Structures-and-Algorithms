@@ -12,19 +12,26 @@ Input: address = "1.1.1.1"
 Output: "1[.]1[.]1[.]1"
 
 class Solution {
-public:
-    string defangIPaddr(string address) {
-        string defanged="[.]";
-        int c=1;string ans="";
-        for(int i=0;i<address.size();i++){
-            if(address[i]=='.' and c<=3)
-            {
-                ans=ans+defanged;c++;
-            }
-            else{
-                ans=ans+address[i];   
+    public String defangIPaddr(String address) {
+        String defanged = "[.]";
+        StringBuilder ans = new StringBuilder();
+
+        for (int i = 0; i < address.length(); i++) {
+            if (address.charAt(i) == '.') {
+                ans.append(defanged);
+            } else {
+                ans.append(address.charAt(i));
             }
         }
-        return ans;
+
+        return ans.toString();
     }
-};
+}
+
+
+
+class Solution {
+    public String defangIPaddr(String address) {
+        return address.replace(".", "[.]");
+    }
+}

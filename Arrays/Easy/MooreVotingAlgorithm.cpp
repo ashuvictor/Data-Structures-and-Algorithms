@@ -5,68 +5,70 @@ The majority element is the element that appears more than ⌊n / 2⌋ times.
  You may assume that the majority element always exists in the array.
  https://leetcode.com/problems/majority-element/
  */
- class Solution {
-public:
-    int majorityElement(vector<int>& nums) {
-        int cnt=0,num=0;
-        for(auto x:nums){
-            if(cnt==0){
-                num=x;
+class Solution {
+    public int majorityElement(int[] nums) {
+        int count = 0;
+        int candidate = 0;
+
+        for (int x : nums) {
+            if (count == 0) {
+                candidate = x;
             }
-            if(x==num){
-                cnt++;
+
+            if (x == candidate) {
+                count++;
+            } else {
+                count--;
             }
-            else
-                cnt--;
         }
-        return num;
+
+        return candidate;
     }
-};
+}
 /*Given an integer array of size n,
  find all elements that appear more than ⌊ n/3 ⌋ times.
  https://leetcode.com/problems/majority-element-ii/
  */
- class Solution {
-public:
-    vector<int> majorityElement(vector<int>& nums) {
-        vector<int>ans;
-        int sz=nums.size();
-        int num1=-1,num2=-1,count1=0,count2=0;
-        for(int i=0;i<sz;i++){
-            if(nums[i]==num1)
-            {
+ import java.util.*;
+
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        List<Integer> ans = new ArrayList<>();
+        int n = nums.length;
+
+        int num1 = 0, num2 = 0;
+        int count1 = 0, count2 = 0;
+
+        // Step 1: Find candidates
+        for (int x : nums) {
+            if (x == num1) {
                 count1++;
-            }
-            else if(nums[i]==num2){
+            } else if (x == num2) {
                 count2++;
-            }
-            else if(count1==0)
-            {
-                num1=nums[i];
-                count1=1;
-            }
-            else if(count2==0)
-            {
-                num2=nums[i];
-                count2=1;
-            }
-            else{
+            } else if (count1 == 0) {
+                num1 = x;
+                count1 = 1;
+            } else if (count2 == 0) {
+                num2 = x;
+                count2 = 1;
+            } else {
                 count1--;
                 count2--;
             }
         }
-        count1=0;
-        count2=0;
-        for(auto x:nums){
-            if(x==num1)
-                count1++;
-           else if(x==num2)
-                count2++;
+
+        // Step 2: Verify candidates
+        count1 = 0;
+        count2 = 0;
+
+        for (int x : nums) {
+            if (x == num1) count1++;
+            else if (x == num2) count2++;
         }
-        if(count1>sz/3)
-            ans.push_back(num1);
-        if(count2>sz/3)
-            ans.push_back(num2);
+
+        if (count1 > n / 3) ans.add(num1);
+        if (count2 > n / 3) ans.add(num2);
+
         return ans;
     }
-};
+}

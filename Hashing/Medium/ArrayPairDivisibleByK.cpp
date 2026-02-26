@@ -12,36 +12,60 @@ by 6 and 7 + 5 = 12 is also divisible by 6.
 one number should have remainder x and other as k-x
 k/2->even frequency
 https://practice.geeksforgeeks.org/problems/array-pair-sum-divisibility-problem3257/1/
+import java.util.*;
+
 class Solution {
-  public:
-    bool canPair(vector<int> nums, int k) {
-        // Code here.
-        unordered_map<int,int>mp;
-        for(int i=0;i<nums.size();i++){
-            int rem=nums[i]%k;
-            mp[rem]++;
+    public boolean canPair(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+
+        // Count remainders
+        for (int num : nums) {
+            int rem = num % k;
+            if (rem < 0) rem += k; // handle negative numbers
+            map.put(rem, map.getOrDefault(rem, 0) + 1);
         }
-        for(int i=0;i<nums.size();i++){
-            int rem=nums[i]%k;
-            if(rem==0)   //number is divisible then frequency is even
-            {
-                if(mp[rem]%2==1)
-                return false;
-            }
-            else if(rem*2==k)
-            {
-                if(mp[rem]%2==1)
-                return false;
-            }
-            else{
-                int rem2=k-rem;
-                if(mp[rem]!=mp[rem2])
-                return false;
+
+        // Check pairing conditions
+        for (int num : nums) {
+            int rem = num % k;
+            if (rem < 0) rem += k;
+
+            if (rem == 0) {
+                // must be even frequency
+                if (map.get(rem) % 2 != 0) return false;
+            } 
+            else if (2 * rem == k) {
+                // special case like k=10, rem=5
+                if (map.get(rem) % 2 != 0) return false;
+            } 
+            else {
+                int rem2 = k - rem;
+                if (map.getOrDefault(rem, 0) != map.getOrDefault(rem2, 0))
+                    return false;
             }
         }
+
         return true;
     }
-};
+}
+
+
+
+
+
+Instead of looping twice, loop over map keys:
+
+for (int rem : map.keySet()) {
+    if (rem == 0 || 2 * rem == k) {
+        if (map.get(rem) % 2 != 0) return false;
+    } else {
+        if (!map.get(rem).equals(map.getOrDefault(k - rem, 0)))
+            return false;
+    }
+}
+
+
+
 Given an array A[] and positive integer K, the task is to count total number of pairs in the array whose sum is divisible by K.
 
 Example 1:
@@ -54,26 +78,49 @@ There are five pairs possible whose sum
 is divisible by '4' i.e., (2, 2), 
 (1, 7), (7, 5), (1, 3) and (5, 3)
 https://leetcode.com/problems/check-if-array-pairs-are-divisible-by-k/
-class Solution
-{
-    public:
-    int countKdivPairs(int A[], int n, int K)
-    {
-        //code here
-        unordered_map<int,int>mp;
-        int count=0;
-        for(int i=0;i<n;i++){
-            int rem=A[i]%K;
-            int rem2=(K-rem)%K;
-            if(mp.find(rem2)!=mp.end())
-            {
-                count+=mp[rem2];
+import java.util.*;
+
+class Solution {
+    public int countKdivPairs(int[] A, int K) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int count = 0;
+
+        for (int num : A) {
+            int rem = num % K;
+            if (rem < 0) rem += K; // handle negatives
+
+            int rem2 = (K - rem) % K;
+
+            if (map.containsKey(rem2)) {
+                count += map.get(rem2);
             }
-            mp[rem]++;
+
+            map.put(rem, map.getOrDefault(rem, 0) + 1);
         }
+
         return count;
     }
-};
+}
+
+
+class Solution {
+    public int countKdivPairs(int[] A, int K) {
+        int[] freq = new int[K];
+        int count = 0;
+
+        for (int num : A) {
+            int rem = num % K;
+            if (rem < 0) rem += K;
+
+            int rem2 = (K - rem) % K;
+            count += freq[rem2];
+
+            freq[rem]++;
+        }
+
+        return count;
+    }
+}
 
 
 
@@ -84,22 +131,34 @@ We want to divide the array into exactly n / 2 pairs such that the sum of each p
 Return true If you can find a way to do that or false otherwise.
 
 class Solution {
-public:
-    bool canArrange(vector<int>& arr, int k) {
-        vector<int> freq(k ,0);
-        for(int i=0 ; i<arr.size() ; i++){
-            freq[(arr[i]%k + k)%k]++;
+    public boolean canArrange(int[] arr, int k) {
+        int[] freq = new int[k];
+
+        // Count normalized remainders
+        for (int num : arr) {
+            int rem = ((num % k) + k) % k; // handle negatives
+            freq[rem]++;
         }
-        bool flag = false;
-        if(freq[0]%2==0){
-            flag = true;
-        }
-        for(int i=1 ; i<k ; i++){
-            if(freq[i]!=freq[k-i]){
-                flag = false;
-                break;
+
+        // Check remainder 0
+        if (freq[0] % 2 != 0) return false;
+
+        // Check pairs (i, k-i)
+        for (int i = 1; i < k; i++) {
+            if (freq[i] != freq[k - i]) {
+                return false;
             }
         }
-        return flag;
+
+        return true;
     }
-};
+}
+
+
+for (int i = 1; i <= k / 2; i++) {
+    if (i == k - i) { // middle element
+        if (freq[i] % 2 != 0) return false;
+    } else {
+        if (freq[i] != freq[k - i]) return false;
+    }
+}

@@ -21,77 +21,88 @@ This is too close, so let’s increase our minimum distance a bit. Let’s incre
 
 But we want to reduce the possibility of collision/fighting as much as possible, so we keep on increasing the minimum distance. Here is an illustration:
 
-#include <bits/stdc++.h>
+import java.util.*;
 
-using namespace std;
-bool isCompatible(vector < int > inp, int dist, int cows) {
-  int n = inp.size();
-  int k = inp[0];
-  cows--;
-  for (int i = 1; i < n; i++) {
-    if (inp[i] - k >= dist) {
-      cows--;
-      if (!cows) {
-        return true;
-      }
-      k = inp[i];
+public class Main {
+
+    static boolean isCompatible(List<Integer> inp, int dist, int cows) {
+        int n = inp.size();
+        int k = inp.get(0);
+        cows--;
+
+        for (int i = 1; i < n; i++) {
+            if (inp.get(i) - k >= dist) {
+                cows--;
+                if (cows == 0) {
+                    return true;
+                }
+                k = inp.get(i);
+            }
+        }
+        return false;
     }
-  }
-  return false;
-}
-int main() {
-  int n = 5, m = 3;
-  vector<int> inp {1,2,8,4,9};
-  sort(inp.begin(), inp.end());
-  int maxD = inp[n - 1] - inp[0];
-  int ans = INT_MIN;
-  for (int d = 1; d <= maxD; d++) {
-    bool possible = isCompatible(inp, d, m);
-    if (possible) {
-      ans = max(ans, d);
+
+    public static void main(String[] args) {
+        int n = 5, m = 3;
+        List<Integer> inp = new ArrayList<>(Arrays.asList(1, 2, 8, 4, 9));
+
+        Collections.sort(inp);
+
+        int maxD = inp.get(n - 1) - inp.get(0);
+        int ans = Integer.MIN_VALUE;
+
+        for (int d = 1; d <= maxD; d++) {
+            boolean possible = isCompatible(inp, d, m);
+            if (possible) {
+                ans = Math.max(ans, d);
+            }
+        }
+
+        System.out.println("The largest minimum distance is " + ans);
     }
-  }
-  cout << "The largest minimum distance is " << ans << '\n';
 }
 
 
 
 solution 2
- #include <bits/stdc++.h>
+ import java.util.Arrays;
 
-    using namespace std;
-    bool isPossible(int a[], int n, int cows, int minDist) {
-      int cntCows = 1;
-      int lastPlacedCow = a[0];
-      for (int i = 1; i < n; i++) {
-        if (a[i] - lastPlacedCow >= minDist) {
-          cntCows++;
-          lastPlacedCow = a[i];
+public class Main {
+
+    static boolean isPossible(int[] a, int n, int cows, int minDist) {
+        int cntCows = 1;
+        int lastPlacedCow = a[0];
+
+        for (int i = 1; i < n; i++) {
+            if (a[i] - lastPlacedCow >= minDist) {
+                cntCows++;
+                lastPlacedCow = a[i];
+            }
         }
-      }
-      if (cntCows >= cows) return true;
-      return false;
+        return cntCows >= cows;
     }
-    int main() {
-      int n = 5, cows = 3;
-      int a[]={1,2,8,4,9};
-      sort(a, a + n);
 
-      int low = 1, high = a[n - 1] - a[0];
+    public static void main(String[] args) {
+        int n = 5, cows = 3;
+        int[] a = {1, 2, 8, 4, 9};
 
-      while (low <= high) {
-        int mid = (low + high) >> 1;
+        Arrays.sort(a);
 
-        if (isPossible(a, n, cows, mid)) {
-          low = mid + 1;
-        } else {
-          high = mid - 1;
+        int low = 1, high = a[n - 1] - a[0];
+
+        while (low <= high) {
+            int mid = (low + high) >> 1;
+
+            if (isPossible(a, n, cows, mid)) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
         }
-      }
-      cout << "The largest minimum distance is " << high << endl;
 
-      return 0;
+        System.out.println("The largest minimum distance is " + high);
     }
+}
 Output: The largest minimum distance is 3
 
 Time Complexity: O(N*log(M)). 

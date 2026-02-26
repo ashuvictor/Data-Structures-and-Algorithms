@@ -3,23 +3,27 @@ Given an integer array nums that may contain duplicates, return all possible sub
 
 The solution set must not contain duplicate subsets. Return the solution in any order.
 */
+import java.util.*;
+
 class Solution {
-public:
-    void solve(int ind,vector<int>&nums,vector<int>&temp,vector<vector<int>>&ans){
-        ans.push_back(temp);
-        for(int i=ind;i<nums.size();i++){
-            if(i>ind and nums[i]==nums[i-1])
-                continue;
-            temp.push_back(nums[i]);
-            solve(i+1,nums,temp,ans);
-            temp.pop_back();
-        }
-    }
-    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-        vector<vector<int>>ans;
-        vector<int>temp;
-        sort(nums.begin(),nums.end());
-        solve(0,nums,temp,ans);
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        Arrays.sort(nums); // sort to handle duplicates
+        solve(0, nums, new ArrayList<>(), ans);
         return ans;
     }
-};
+
+    private void solve(int ind, int[] nums, List<Integer> temp, List<List<Integer>> ans) {
+        ans.add(new ArrayList<>(temp));
+
+        for (int i = ind; i < nums.length; i++) {
+            // skip duplicates
+            if (i > ind && nums[i] == nums[i - 1]) continue;
+
+            temp.add(nums[i]);
+            solve(i + 1, nums, temp, ans);
+            temp.remove(temp.size() - 1); // backtrack
+        }
+    }
+}

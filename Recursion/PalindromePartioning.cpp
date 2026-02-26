@@ -15,33 +15,39 @@ Example 2:
 Input: s = "a"
 Output: [["a"]]
 */
+import java.util.*;
+
 class Solution {
-public:
-    bool isPal(string s,int low,int high){
-        while(low<high){
-            if(s[low++]!=s[high--])
+
+    private boolean isPal(String s, int low, int high) {
+        while (low < high) {
+            if (s.charAt(low++) != s.charAt(high--))
                 return false;
         }
         return true;
     }
-    void solve(int start,string s,vector<string>&temp,vector<vector<string>>&ans)
-    {
-        if(start==s.size())
-        {
-            ans.push_back(temp);
+
+    private void solve(int start, String s,
+                       List<String> temp,
+                       List<List<String>> ans) {
+
+        if (start == s.length()) {
+            ans.add(new ArrayList<>(temp));
+            return;
         }
-        for(int end=start;end<s.size();end++){
-            if(isPal(s,start,end)){
-                temp.push_back(s.substr(start,end-start+1));
-                solve(end+1,s,temp,ans);
-                temp.pop_back();
+
+        for (int end = start; end < s.length(); end++) {
+            if (isPal(s, start, end)) {
+                temp.add(s.substring(start, end + 1));
+                solve(end + 1, s, temp, ans);
+                temp.remove(temp.size() - 1); // backtrack
             }
         }
     }
-    vector<vector<string>> partition(string s) {
-        vector<vector<string>>ans;
-        vector<string>temp;
-        solve(0,s,temp,ans);
+
+    public List<List<String>> partition(String s) {
+        List<List<String>> ans = new ArrayList<>();
+        solve(0, s, new ArrayList<>(), ans);
         return ans;
     }
-};
+}

@@ -6,45 +6,51 @@ The ith package on the conveyor belt has a weight of weights[i]. Each day, we lo
 Return the least weight capacity of the ship that will result in all the packages on the conveyor belt being shipped within days days.
 https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/
 */
+import java.util.*;
+
 class Solution {
-public:
-    bool isValid(vector<int>&weights,int days,int mid){
-        int sum=0;
-        int req_days=1;
-        for(int i=0;i<weights.size();i++){
-            sum+=weights[i];
-            if(sum>mid){
-                req_days++;sum=weights[i];
-                
+
+    public boolean isValid(int[] weights, int days, int mid) {
+        int sum = 0;
+        int reqDays = 1;
+
+        for (int w : weights) {
+            sum += w;
+            if (sum > mid) {
+                reqDays++;
+                sum = w;
             }
-            if(req_days>days)
+            if (reqDays > days)
                 return false;
         }
         return true;
     }
-    int shipWithinDays(vector<int>& weights, int days) {
-        int mx=-1;
-        int sum=0;
-        for(int i=0;i<weights.size();i++){
-            if(weights[i]>mx)
-                mx=weights[i];
-            sum+=weights[i];
+
+    public int shipWithinDays(int[] weights, int days) {
+        int mx = -1;
+        int sum = 0;
+
+        for (int w : weights) {
+            mx = Math.max(mx, w);
+            sum += w;
         }
-        if(days==weights.size())
+
+        if (days == weights.length)
             return mx;
-        int start=mx,end=sum;
-        int ans=0;
-        while(start<=end){
-            int mid=(start+end)/2;
-            if(isValid(weights,days,mid)){
-                ans=mid;
-                end=mid-1;
-            }
-            else
-            {
-                start=mid+1;
+
+        int start = mx, end = sum;
+        int ans = 0;
+
+        while (start <= end) {
+            int mid = (start + end) / 2;
+
+            if (isValid(weights, days, mid)) {
+                ans = mid;
+                end = mid - 1;
+            } else {
+                start = mid + 1;
             }
         }
         return ans;
     }
-};
+}

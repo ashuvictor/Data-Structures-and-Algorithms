@@ -8,45 +8,56 @@ Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
 Output: [[1,6],[8,10],[15,18]]
 Explanation: Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].
 https://leetcode.com/problems/merge-intervals/
-class Solution {
-public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        vector<vector<int>>mergedIntervals;
-        if(intervals.size()==0)
-            return mergedIntervals;
-        sort(intervals.begin(),intervals.end());
-        vector<int>tempInterval=intervals[0];
-        for(auto it:intervals){
-            if(it[0]<=tempInterval[1])
-                tempInterval[1]=max(tempInterval[1],it[1]);
-            else{
-                mergedIntervals.push_back(tempInterval);
-                tempInterval=it;
-            }
-        }
-        mergedIntervals.push_back(tempInterval);
-        return mergedIntervals;
-    }
-};
-
+import java.util.*;
 
 class Solution {
-public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        vector<vector<int>>merged;
-        if(intervals.size()==0)
-            return merged;
-        sort(intervals.begin(),intervals.end());
-        merged.push_back(intervals[0]);
-        for(int i=1;i<intervals.size();i++){
-            if(merged.back()[1]>=intervals[i][0])
-            {
-                merged.back()[1]=max(merged.back()[1],intervals[i][1]);
-            }
-            else{
-                merged.push_back(intervals[i]);
+    public int[][] merge(int[][] intervals) {
+        if (intervals.length == 0) return new int[0][0];
+
+        // Sort by start time
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+
+        List<int[]> merged = new ArrayList<>();
+        int[] temp = intervals[0];
+
+        for (int[] curr : intervals) {
+            if (curr[0] <= temp[1]) {
+                temp[1] = Math.max(temp[1], curr[1]);
+            } else {
+                merged.add(temp);
+                temp = curr;
             }
         }
-        return merged;
+
+        merged.add(temp);
+
+        return merged.toArray(new int[merged.size()][]);
     }
-};
+}
+
+
+import java.util.*;
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        if (intervals.length == 0) return new int[0][0];
+
+        // Sort by start time
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+
+        List<int[]> merged = new ArrayList<>();
+        merged.add(intervals[0]);
+
+        for (int i = 1; i < intervals.length; i++) {
+            int[] last = merged.get(merged.size() - 1);
+
+            if (last[1] >= intervals[i][0]) {
+                last[1] = Math.max(last[1], intervals[i][1]);
+            } else {
+                merged.add(intervals[i]);
+            }
+        }
+
+        return merged.toArray(new int[merged.size()][]);
+    }
+}

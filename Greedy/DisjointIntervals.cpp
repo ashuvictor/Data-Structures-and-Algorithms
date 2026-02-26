@@ -50,18 +50,33 @@ Output 2:
  2
 https://www.interviewbit.com/problems/disjoint-intervals/
 
-int Solution::solve(vector<vector<int> > &A) {
-sort(A.begin(),A.end());
-vector<vector<int>>ans;
-ans.push_back(A[0]);
-for(int i=1;i<A.size();i++){
-    if(ans.back()[1]>=A[i][0])
-    {
-        ans.back()[1]=min(ans.back()[1],A[i][1]);
+import java.util.*;
+
+public class Solution {
+    public int solve(ArrayList<ArrayList<Integer>> A) {
+        // Sort intervals lexicographically
+        A.sort((a, b) -> {
+            if (!a.get(0).equals(b.get(0))) {
+                return a.get(0) - b.get(0);
+            }
+            return a.get(1) - b.get(1);
+        });
+
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        ans.add(new ArrayList<>(A.get(0)));
+
+        for (int i = 1; i < A.size(); i++) {
+            ArrayList<Integer> last = ans.get(ans.size() - 1);
+            ArrayList<Integer> curr = A.get(i);
+
+            if (last.get(1) >= curr.get(0)) {
+                // Merge by shrinking end (same as your C++ logic)
+                last.set(1, Math.min(last.get(1), curr.get(1)));
+            } else {
+                ans.add(new ArrayList<>(curr));
+            }
+        }
+
+        return ans.size();
     }
-    else{
-        ans.push_back(A[i]);
-    }
-}
-return ans.size();
 }

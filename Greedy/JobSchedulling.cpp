@@ -1,34 +1,37 @@
 https://practice.geeksforgeeks.org/problems/job-sequencing-problem-1587115620/1/?category
-struct Job 
-{ 
-    int id;	 // Job Id 
-    int dead; // Deadline of job 
-    int profit; // Profit if job is over before or on deadline 
-};
-*/
+import java.util.*;
 
-class Solution 
-{
-    public:
-    //Function to find the maximum profit and the number of jobs done.
-    static bool comp(Job a,Job b){
-        return a.profit>b.profit;
+class Job {
+    int id, dead, profit;
+    Job(int id, int dead, int profit) {
+        this.id = id;
+        this.dead = dead;
+        this.profit = profit;
     }
-    vector<int> JobScheduling(Job arr[], int n) 
-    { bool done[n]={false};
-    int day=0,profit=0;
-    sort(arr,arr+n,comp);
-    for(int i=0;i<n;i++){
-        for(int j=min(n,arr[i].dead-1);j>=0;j--){
-            if(done[j]==false){
-                day++;
-                profit+=arr[i].profit;
-                done[j]=true;
-                break;
+}
+
+class Solution {
+
+    public int[] JobScheduling(Job[] arr, int n) {
+
+        // Sort by profit descending
+        Arrays.sort(arr, (a, b) -> b.profit - a.profit);
+
+        boolean[] done = new boolean[n];
+        int day = 0, profit = 0;
+
+        for (int i = 0; i < n; i++) {
+            // Try latest possible slot
+            for (int j = Math.min(n, arr[i].dead) - 1; j >= 0; j--) {
+                if (!done[j]) {
+                    done[j] = true;
+                    day++;
+                    profit += arr[i].profit;
+                    break;
+                }
             }
         }
+
+        return new int[]{day, profit};
     }
-    return {day,profit};
-        // your code here
-    } 
-};
+}

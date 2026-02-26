@@ -1,32 +1,34 @@
 https://practice.geeksforgeeks.org/problems/n-meetings-in-one-room-1587115620/1/?category
 
-class Solution
-{
-    public:
-    //Function to find the maximum number of meetings that can
-    //be performed in a meeting room.
-    static bool comp(pair<int,int>i1,pair<int,int>i2){
-        if(i1.second==i2.second)
-        return i1.first<i2.first;
-        return i1.second<i2.second;
-    }
-    int maxMeetings(int start[], int end[], int n)
-    {
-        vector<pair<int,int>>timing;
-        for(int i=0;i<n;i++){
-            timing.push_back({start[i],end[i]});
+import java.util.*;
+
+class Solution {
+    static int maxMeetings(int[] start, int[] end, int n) {
+
+        // Store meetings as [start, end]
+        int[][] timing = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            timing[i][0] = start[i];
+            timing[i][1] = end[i];
         }
-        sort(timing.begin(),timing.end(),comp);
-        int i=0,j=1;
-        int ans=1;
-        while(j<n){
-            if(timing[i].second<timing[j].first){
-                i=j;j++;ans++;
+
+        // Sort by end time, then start time
+        Arrays.sort(timing, (a, b) -> {
+            if (a[1] == b[1]) return a[0] - b[0];
+            return a[1] - b[1];
+        });
+
+        int i = 0, j = 1;
+        int ans = 1;
+
+        while (j < n) {
+            if (timing[i][1] < timing[j][0]) {
+                ans++;
+                i = j;
             }
-            else
-            {
-                j++;
-            }
+            j++;
         }
+
         return ans;
     }
+}

@@ -17,51 +17,49 @@ countAndSay(4) = say "21" = one 2 + one 1 = "12" + "11" = "1211"
 
 
 
-string solve(string s){
-    int n = s.size();
-    int i = 0;
-    int j = 0;
-    int cnt = 0;
-    string ans = "";
-    while(i<n){
-        j = i;
-        cnt = 1;
-        while(i<n and s[i]==s[i+1]){
-            i++;
-            cnt++;
-        }
-        ans += (cnt+'0');
-        ans += s[j];    
-        i++;
-    }
-    return ans;
-}
+class Solution {
+    public String countAndSay(int n) {
+        if (n == 1) return "1";
 
-string countAndSay(int n) {
-    string s = "1";
-    n--;
-    while(n--){
-        s = solve(s);
-    }
-    return s;
-}
+        String s = countAndSay(n - 1);
+        int k = 1;
+        StringBuilder ans = new StringBuilder();
 
-
-string countAndSay(int n) {
-        if(n==1)
-            return "1";
-        string s=countAndSay(n-1);
-        int k=1;
-        string ans="";
-        for(int i=0;i<s.length();i++)
-        {
-            if(s[i]!=s[i+1])
-            {
-                ans+= (k+'0');
-                ans+=s[i];
-                k=0;
+        for (int i = 0; i < s.length(); i++) {
+            if (i == s.length() - 1 || s.charAt(i) != s.charAt(i + 1)) {
+                ans.append(k);
+                ans.append(s.charAt(i));
+                k = 0;
             }
             k++;
         }
-        return ans;
+
+        return ans.toString();
     }
+}
+
+
+///BEST
+
+class Solution {
+    public String countAndSay(int n) {
+        String s = "1";
+
+        for (int i = 2; i <= n; i++) {
+            StringBuilder next = new StringBuilder();
+            int count = 1;
+
+            for (int j = 0; j < s.length(); j++) {
+                if (j == s.length() - 1 || s.charAt(j) != s.charAt(j + 1)) {
+                    next.append(count).append(s.charAt(j));
+                    count = 0;
+                }
+                count++;
+            }
+
+            s = next.toString();
+        }
+
+        return s;
+    }
+}

@@ -1,47 +1,63 @@
-/* MAX PRODUCT SUBARRAY
-https://leetcode.com/problems/maximum-product-subarray/
-*/
+Approach 1 — Kadane Variant (Best)
+
+👉 Track both max and min because of negatives.
+
+Java 21 Version
 class Solution {
-public:
-    int maxProduct(vector<int>& nums) {
-        int maxp=nums[0];
-        int minp=nums[0];
-        int ans=nums[0];
-        for(int i=1;i<nums.size();i++){
-            if(nums[i]<0)
-                swap(maxp,minp);
-            minp=min(minp*nums[i],nums[i]);
-            maxp=max(maxp*nums[i],nums[i]);
-            ans=max(maxp,ans);
+    public int maxProduct(int[] nums) {
+        int maxp = nums[0];
+        int minp = nums[0];
+        int ans = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] < 0) {
+                int temp = maxp;
+                maxp = minp;
+                minp = temp;
+            }
+
+            minp = Math.min(minp * nums[i], nums[i]);
+            maxp = Math.max(maxp * nums[i], nums[i]);
+
+            ans = Math.max(ans, maxp);
         }
+
         return ans;
     }
-};
-Appraoch :
-Step 1: Traverse the array from Left -> Right.
-Step 2: Traverse the array from Right -> Left.
+}
+🧠 Why Track min?
 
+Because:
+
+(-2) * (-3) = +6
+
+A small negative can become a big positive.
+
+✅ Approach 2 — Left to Right + Right to Left
+
+👉 Handles zero splitting naturally.
+
+Java 21 Version
 class Solution {
-public:
-    int maxProduct(vector<int>& nums) {
-        int ans=INT_MIN;
-        int prod=1;
+    public int maxProduct(int[] nums) {
+        int ans = Integer.MIN_VALUE;
+        int prod = 1;
 
-        
-        for(int i=0;i<nums.size();i++){
-            prod=prod*nums[i];
-            ans=max(ans,prod);
-            
-            if(prod==0) prod=1;
+        // Left to right
+        for (int i = 0; i < nums.length; i++) {
+            prod *= nums[i];
+            ans = Math.max(ans, prod);
+            if (prod == 0) prod = 1;
         }
-        
-        prod=1;
-        for(int i=nums.size()-1;i>=0;i--){
-            prod=prod*nums[i];
-            ans=max(prod,ans);
-            
-            if(prod==0) prod=1;
+
+        // Right to left
+        prod = 1;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            prod *= nums[i];
+            ans = Math.max(ans, prod);
+            if (prod == 0) prod = 1;
         }
+
         return ans;
     }
-};
+}

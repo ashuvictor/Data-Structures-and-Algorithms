@@ -5,15 +5,18 @@ https://leetcode.com/problems/path-sum/
 
 
 class Solution {
-public:
-    bool hasPathSum(TreeNode* root, int targetSum) {
-        if(root==NULL)
+
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null)
             return false;
-        if(root->left==NULL and root->right==NULL and root->val==targetSum)
+
+        // leaf node check
+        if (root.left == null && root.right == null && root.val == targetSum)
             return true;
-        bool leftS=hasPathSum(root->left,targetSum-root->val);
-        bool rightS=hasPathSum(root->right,targetSum-root->val);
-        return leftS || rightS;
-        
+
+        boolean left = hasPathSum(root.left, targetSum - root.val);
+        boolean right = hasPathSum(root.right, targetSum - root.val);
+
+        return left || right;
     }
-};
+}

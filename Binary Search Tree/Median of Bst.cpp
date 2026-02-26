@@ -14,51 +14,61 @@ Explanation: Inorder of Given BST will be:
 1, 3, 4, 6, 7, 8, 9. So, here median will 6.
 
 
-void count_nodes(Node* root,int &c){
-    if(!root) return;
-    count_nodes(root->left,c);
-    c++;
-    count_nodes(root->right,c);
-}
+class Solution {
 
-void func(Node* root,Node* &cur,Node* &prev,int &c,int k,int &f){
-    if(!root) return;
-    func(root->left,cur,prev,c,k,f);
-    if(prev==NULL){
-        prev = root;
-        c++;
-    }
-    else if(c==k){
-        c++;
-        cur = root;
-        f = 1;
-        return;
-    }
-    else if(f==0){
-        c++;
-        prev = root;
-    }
-    func(root->right,cur,prev,c,k,f);
-}
+    // Count total nodes
+    private void countNodes(Node root, int[] count) {
+        if (root == null) return;
 
-float findMedian(struct Node *root)
-{
-      //Code here
-      int n = 0;
-      count_nodes(root,n);
-      Node* cur = NULL;
-      Node* prev = NULL;
-      int c = 1;
-      int x = (n/2)+1;
-      int f = 0;
-      func(root,cur,prev,c,x,f);
-      if(n&1){
-          float ans = (cur->data)*1.0;
-          return ans;
-      }
-      else {
-          float ans = ((cur->data+prev->data)*1.0)/(2*1.0);
-          return ans;
-      }
-      
+        countNodes(root.left, count);
+        count[0]++;
+        countNodes(root.right, count);
+    }
+
+    // Find kth node using inorder
+    private void func(Node root, Node[] cur, Node[] prev,
+                      int[] c, int k, boolean[] found) {
+        if (root == null) return;
+
+        func(root.left, cur, prev, c, k, found);
+
+        if (prev[0] == null) {
+            prev[0] = root;
+            c[0]++;
+        }
+        else if (c[0] == k) {
+            cur[0] = root;
+            found[0] = true;
+            c[0]++;
+            return;
+        }
+        else if (!found[0]) {
+            prev[0] = root;
+            c[0]++;
+        }
+
+        func(root.right, cur, prev, c, k, found);
+    }
+
+    public float findMedian(Node root) {
+        int[] n = {0};
+        countNodes(root, n);
+
+        Node[] cur = {null};
+        Node[] prev = {null};
+        int[] c = {1};
+        int k = (n[0] / 2) + 1;
+        boolean[] found = {false};
+
+        func(root, cur, prev, c, k, found);
+
+        // Odd nodes
+        if ((n[0] & 1) == 1) {
+            return cur[0].data;
+        }
+        // Even nodes
+        else {
+            return (cur[0].data + prev[0].data) / 2.0f;
+        }
+    }
 }

@@ -1,27 +1,30 @@
 https://techiedelight.com/practice/?problem=LevelOrderTraversal
 
-vector<int> findLevelOrderTraversal(Node* root)
-	{
-		// Write your code here...
-		vector<int>ans;
-		if(root==NULL)
-		return ans;
-		queue<Node*>q;
-		q.push(root);
-		while(!q.empty()){
-			int sz=q.size();
-			Node* temp;
-			while(sz--){
-				temp=q.front();
-				q.pop();
-				ans.push_back(temp->data);
-				if(temp->left)
-				q.push(temp->left);
-				if(temp->right)
-				q.push(temp->right);
-			}
-		}
-		return ans;
-	
-	}
-};
+import java.util.*;
+
+class Solution {
+
+    public List<Integer> findLevelOrderTraversal(Node root) {
+        List<Integer> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+
+            while (size-- > 0) {
+                Node temp = queue.poll();
+                ans.add(temp.data);
+
+                if (temp.left != null)
+                    queue.offer(temp.left);
+                if (temp.right != null)
+                    queue.offer(temp.right);
+            }
+        }
+
+        return ans;
+    }
+}

@@ -20,40 +20,47 @@ Explanation:
 Path to get the maximum gold, 9 -> 8 -> 7.
 
 class Solution {
-public:
-    int n,m;
-    int dx[4]={1,0,-1,0};
-    int dy[4]={0,1,0,-1};
-    int solve(vector<vector<int>>&grid,int i,int j){
-        
-        if(i<0 or i>=m or j<0 or j>=n)
+
+    int m, n;
+    int[] dx = {1, 0, -1, 0};
+    int[] dy = {0, 1, 0, -1};
+
+    private int solve(int[][] grid, int i, int j) {
+        // boundary check
+        if (i < 0 || i >= m || j < 0 || j >= n)
             return 0;
-        if(grid[i][j]==0)
+
+        if (grid[i][j] == 0)
             return 0;
-        int temp=grid[i][j];
-        grid[i][j]=0;
-        int ans=0;
-        for(int k=0;k<4;k++){
-            int xx=i+dx[k];
-            int yy=j+dy[k];
-            ans=max(ans,solve(grid,xx,yy));
+
+        int temp = grid[i][j];
+        grid[i][j] = 0; // mark visited
+
+        int best = 0;
+        for (int k = 0; k < 4; k++) {
+            int xx = i + dx[k];
+            int yy = j + dy[k];
+            best = Math.max(best, solve(grid, xx, yy));
         }
-        grid[i][j]=temp;
-        return ans+temp;
+
+        grid[i][j] = temp; // backtrack
+        return best + temp;
     }
-    int getMaximumGold(vector<vector<int>>& grid) {
-     m=grid.size();
-        n=grid[0].size();
-        int ans=0;
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(grid[i][j]>0)
-                {
-                    ans=max(ans,solve(grid,i,j));
+
+    public int getMaximumGold(int[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+
+        int ans = 0;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] > 0) {
+                    ans = Math.max(ans, solve(grid, i, j));
                 }
             }
         }
+
         return ans;
-        
     }
-};
+}

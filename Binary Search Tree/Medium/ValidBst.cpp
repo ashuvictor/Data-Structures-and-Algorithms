@@ -2,20 +2,47 @@
 https://leetcode.com/problems/validate-binary-search-tree/
 */
 
+
+
+
 class Solution {
-public:
-    bool valid(TreeNode* root,TreeNode* mini,TreeNode* maxi){
-        if(root==NULL)
+
+    private boolean validate(TreeNode root, long min, long max) {
+        if (root == null) return true;
+
+        if (root.val <= min || root.val >= max)
+            return false;
+
+        return validate(root.left, min, root.val) &&
+               validate(root.right, root.val, max);
+    }
+
+    public boolean isValidBST(TreeNode root) {
+        return validate(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+}
+
+
+
+class Solution {
+
+    private boolean valid(TreeNode root, TreeNode min, TreeNode max) {
+        if (root == null)
             return true;
-        if(mini!=NULL and root->val<=mini->val)
+
+        if (min != null && root.val <= min.val)
             return false;
-        if(maxi!=NULL and root->val>=maxi->val)
+
+        if (max != null && root.val >= max.val)
             return false;
-        bool left=valid(root->left,mini,root);
-        bool right=valid(root->right,root,maxi);
-        return left and right;
+
+        boolean left = valid(root.left, min, root);
+        boolean right = valid(root.right, root, max);
+
+        return left && right;
     }
-    bool isValidBST(TreeNode* root) {
-        return valid(root,NULL,NULL);
+
+    public boolean isValidBST(TreeNode root) {
+        return valid(root, null, null);
     }
-};
+}

@@ -31,26 +31,30 @@ is 10 + 13 + 15 = 38.
 
 
 https://practice.geeksforgeeks.org/problems/minimum-cost-of-ropes-1587115620/1#
-class Solution
-{
-    public:
-    //Function to return the minimum cost of connecting the ropes.
-    long long minCost(long long arr[], long long n) {
-        // Your code here
-        priority_queue<long long,vector<long long>,greater<long long>>pq;
-        for(long long i=0;i<n;i++){
-            pq.push(arr[i]);
+import java.util.*;
+
+class Solution {
+
+    public long minCost(long[] arr, int n) {
+        PriorityQueue<Long> pq = new PriorityQueue<>();
+
+        // add all ropes
+        for (int i = 0; i < n; i++) {
+            pq.offer(arr[i]);
         }
-        long long ans=0;
-        while(pq.size()>1)
-        {
-            long long x=pq.top();
-            pq.pop();
-            long long y=pq.top();
-            pq.pop();
-            ans+=x+y;
-            pq.push(x+y);
+
+        long cost = 0;
+
+        while (pq.size() > 1) {
+            long x = pq.poll();
+            long y = pq.poll();
+
+            long sum = x + y;
+            cost += sum;
+
+            pq.offer(sum);
         }
-        return ans;
+
+        return cost;
     }
-};
+}

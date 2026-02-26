@@ -37,66 +37,64 @@ public:
 		};
 	*/
 
-	vector<int> findReverseLevelOrderTraversal(Node* root)
-	{
-	
-		// Write your code here...
-		vector<int>ans;
-		queue<Node*>q;
-		q.push(root);
-		while(!q.empty())
-		{
-			int sz=q.size();
-			while(sz--){
-				Node* temp=q.front();
-				q.pop();
-				ans.push_back(temp->data);
-				if(temp->right)
-				q.push(temp->right);
-				if(temp->left)
-				q.push(temp->left);
-				
-			}
-		}
-		reverse(ans.begin(),ans.end())
-		return ans;
-	}
-};
-
+import java.util.*;
 
 class Solution {
-public:
-    vector<vector<int>> levelOrderBottom(TreeNode* root) {
-        vector<vector<int>>result;
-        stack<vector<int>>st;
-        queue<TreeNode*>que;
-        
-        if(!root)
-            return result;
-        que.push(root);
-        
-        while(que.size()>0){
-            vector<int>temp;
-            int n=que.size();
-            for(int i=0;i<n;i++){
-                TreeNode * node= que.front();
-                que.pop();
-                temp.push_back(node->val);
-                if(node->left)
-                    que.push(node->left);
-                if(node->right)
-                    que.push(node->right);
-            }
-            if(temp.size()){
-                st.push(temp);
-            }
+
+    public List<Integer> findReverseLevelOrderTraversal(Node root) {
+        List<Integer> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            Node temp = queue.poll();
+            ans.add(temp.data);
+
+            // push right first
+            if (temp.right != null) queue.offer(temp.right);
+            if (temp.left != null) queue.offer(temp.left);
         }
-        
-        while(st.size()>0){
-            result.push_back(st.top());
-            st.pop();
+
+        Collections.reverse(ans);
+        return ans;
+    }
+}
+
+
+import java.util.*;
+
+class Solution {
+
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) return result;
+
+        Stack<List<Integer>> stack = new Stack<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            List<Integer> temp = new ArrayList<>();
+
+            for (int i = 0; i < n; i++) {
+                TreeNode node = queue.poll();
+                temp.add(node.val);
+
+                if (node.left != null) queue.offer(node.left);
+                if (node.right != null) queue.offer(node.right);
+            }
+
+            stack.push(temp);
         }
-        
+
+        // pop stack into result
+        while (!stack.isEmpty()) {
+            result.add(stack.pop());
+        }
+
         return result;
     }
-};
+}

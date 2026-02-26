@@ -14,51 +14,50 @@ targetPos[ ] = {1, 1}
 Output:
 3
 https://practice.geeksforgeeks.org/problems/knight-walk4521/1/?page=1&difficulty[]=1&status[]=solved&category[]=Graph&sortBy=submissions
+import java.util.*;
+
 class Solution {
-public:
-	int minStepToReachTarget(vector<int>&KnightPos, vector<int>&TargetPos, int N){
-	    int dx[] = { -2, -1, 1, 2, -2, -1, 1, 2 };
-   int dy[] = { -1, -2, -2, -1, 1, 2, 2, 1 };
-   int steps = 0;
-   queue<pair<int, int>> q;
-   int p = KnightPos[0] ;
-   int f = KnightPos[1] ;
 
-   q.push({p, f});
+    public int minStepToReachTarget(int[] KnightPos, int[] TargetPos, int N) {
 
-   bool visited[N+1][N+1];
-   for (int i = 0; i <= N; i++)
-   {
-       for (int j = 0; j <= N; j++)
-       {
-           visited[i][j] = false;
-       }
-   }
-   visited[p][f]=true;
-   while (!q.empty())
-   {
-       int fl = q.size();
-       for (int x = 0; x < fl; x++)
-       {
+        int[] dx = {-2, -1, 1, 2, -2, -1, 1, 2};
+        int[] dy = {-1, -2, -2, -1, 1, 2, 2, 1};
 
-           int i = q.front().first;
-           int j = q.front().second;
-           q.pop();
+        Queue<int[]> q = new LinkedList<>();
 
-           if (i == TargetPos[0] && j == TargetPos[1])
-               return steps;
-           for (int f = 0; f < 8; f++)
-           {
-               int l = i + dx[f];
-               int r = j + dy[f];
-               if (l >= 1 && l <=N && r >= 1 && r <=N && !visited[l][r])
-               {
-                   visited[l][r] = true;
-                   q.push({l, r});
-               }
-           }
-       }
-       steps++;
-   }
-   return steps;
-} // Code here
+        int p = KnightPos[0];
+        int f = KnightPos[1];
+
+        q.offer(new int[]{p, f});
+
+        boolean[][] visited = new boolean[N + 1][N + 1];
+        visited[p][f] = true;
+
+        int steps = 0;
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+
+            for (int x = 0; x < size; x++) {
+                int[] curr = q.poll();
+                int i = curr[0];
+                int j = curr[1];
+
+                if (i == TargetPos[0] && j == TargetPos[1])
+                    return steps;
+
+                for (int k = 0; k < 8; k++) {
+                    int ni = i + dx[k];
+                    int nj = j + dy[k];
+
+                    if (ni >= 1 && ni <= N && nj >= 1 && nj <= N && !visited[ni][nj]) {
+                        visited[ni][nj] = true;
+                        q.offer(new int[]{ni, nj});
+                    }
+                }
+            }
+            steps++;
+        }
+        return steps;
+    }
+}

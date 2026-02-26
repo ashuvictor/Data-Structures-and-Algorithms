@@ -6,23 +6,31 @@ Output: ["1->2->5","1->3"]
 https://leetcode.com/problems/binary-tree-paths/
 
 
+import java.util.*;
+
 class Solution {
-public:
-    void binaryTree(TreeNode* root,vector<string>&ans,string s)
-    {
-        if(root->left==NULL and root->right==NULL)
-        {ans.push_back(s);
-        return;}
-        if(root->left)
-            binaryTree(root->left,ans,s+"->"+to_string(root->left->val));
-        if(root->right)
-            binaryTree(root->right,ans,s+"->"+to_string(root->right->val));
+
+    private void binaryTree(TreeNode root, List<String> ans, String path) {
+        // leaf node
+        if (root.left == null && root.right == null) {
+            ans.add(path);
+            return;
+        }
+
+        if (root.left != null) {
+            binaryTree(root.left, ans, path + "->" + root.left.val);
+        }
+
+        if (root.right != null) {
+            binaryTree(root.right, ans, path + "->" + root.right.val);
+        }
     }
-    vector<string> binaryTreePaths(TreeNode* root) {
-     vector<string>ans;
-        if(root==NULL)
-            return ans;
-        binaryTree(root,ans,to_string(root->val));
+
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        binaryTree(root, ans, String.valueOf(root.val));
         return ans;
     }
-};
+}

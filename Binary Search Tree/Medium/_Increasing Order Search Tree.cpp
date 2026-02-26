@@ -10,48 +10,80 @@ Input: root = [5,3,6,2,4,null,8,1,null,null,null,7,9]
 Output: [1,null,2,null,3,null,4,null,5,null,6,null,7,null,8,null,
 
 class Solution {
-public:
-    void inorder(TreeNode* root,TreeNode* &temp)
-    {
-        if(root==NULL)
-            return;
-        inorder(root->left,temp);
-       temp->right=new TreeNode(root->val);
-        temp=temp->right;
-        inorder(root->right,temp);
-        
-    }
-    TreeNode* increasingBST(TreeNode* root) {
-       TreeNode* temp=new TreeNode();
-        TreeNode* ans=temp;
-        inorder(root,temp);
-        return ans->right;
-    }
-};
 
-lass Solution {
-public:
-    void inorder(TreeNode* root,vector<int>&v)
-    {
-        if(root==NULL)
-            return;
-        inorder(root->left,v);
-        v.push_back(root->val);
-        inorder(root->right,v);
+    private void inorder(TreeNode root, TreeNode[] temp) {
+        if (root == null) return;
+
+        inorder(root.left, temp);
+
+        temp[0].right = new TreeNode(root.val);
+        temp[0] = temp[0].right;
+
+        inorder(root.right, temp);
     }
-    TreeNode* increasingBST(TreeNode* root) {
-        if(root==NULL)
-            return root;
-     vector<int>v;
-        inorder(root,v);
-        TreeNode* temp=new TreeNode();
-        TreeNode* ans=temp;
-        for(auto x:v)
-        {
-            TreeNode* curr=new TreeNode(x);
-           temp->right=curr;
-           temp=temp->right;
+
+    public TreeNode increasingBST(TreeNode root) {
+        TreeNode dummy = new TreeNode(); // like temp in C++
+        TreeNode[] temp = new TreeNode[]{dummy}; // simulate reference
+
+        inorder(root, temp);
+        return dummy.right;
+    }
+}
+
+
+
+class Solution {
+    TreeNode curr;
+
+    public TreeNode increasingBST(TreeNode root) {
+        TreeNode dummy = new TreeNode();
+        curr = dummy;
+        inorder(root);
+        return dummy.right;
+    }
+
+    private void inorder(TreeNode root) {
+        if (root == null) return;
+
+        inorder(root.left);
+
+        root.left = null;
+        curr.right = root;
+        curr = root;
+
+        inorder(root.right);
+    }
+}
+
+
+
+import java.util.*;
+
+class Solution {
+
+    private void inorder(TreeNode root, List<Integer> list) {
+        if (root == null) return;
+
+        inorder(root.left, list);
+        list.add(root.val);
+        inorder(root.right, list);
+    }
+
+    public TreeNode increasingBST(TreeNode root) {
+        if (root == null) return null;
+
+        List<Integer> list = new ArrayList<>();
+        inorder(root, list);
+
+        TreeNode dummy = new TreeNode();
+        TreeNode temp = dummy;
+
+        for (int val : list) {
+            temp.right = new TreeNode(val);
+            temp = temp.right;
         }
-        return ans->right;
+
+        return dummy.right;
     }
-};
+}

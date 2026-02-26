@@ -1,39 +1,35 @@
-int findCeil(BinaryTreeNode<int> *root, int key){
+public int findCeil(TreeNode root, int key) {
+    int ceil = -1;
 
-	int ceil = -1; 
-    while (root) {
+    while (root != null) {
 
-        if (root->data == key) {
-            ceil = root->data;
-            return ceil;
+        if (root.val == key) {
+            return root.val;
         }
- 
-        if (key > root->data) {
-            root = root->right;
-        }
-        else {
-            ceil = root->data; 
-            root = root->left;
+
+        if (key > root.val) {
+            root = root.right;
+        } else {
+            ceil = root.val;
+            root = root.left;
         }
     }
-    return ceil; 
+    return ceil;
 }
-int floorInBST(TreeNode<int> * root, int key)
-{
-    int floor = -1; 
-    while (root) {
- 
-        if (root->val == key) {
-            floor = root->val;
-            return floor;
+public int floorInBST(TreeNode root, int key) {
+    int floor = -1;
+
+    while (root != null) {
+
+        if (root.val == key) {
+            return root.val;
         }
- 
-        if (key > root->val) {
-            floor = root->val;
-            root = root->right;
-        }
-        else {
-            root = root->left;
+
+        if (key > root.val) {
+            floor = root.val;
+            root = root.right;
+        } else {
+            root = root.left;
         }
     }
     return floor;

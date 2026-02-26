@@ -8,48 +8,60 @@ Every minute, any fresh orange that is 4-directionally adjacent to a rotten oran
 Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
 https://leetcode.com/problems/rotting-oranges/
 
+import java.util.*;
+
 class Solution {
-public:
-    int orangesRotting(vector<vector<int>>& grid) {
-        int n=grid.size();
-        int m=grid[0].size();
-        queue<pair<int,int>>q;
-        int fresh=0,rotten=0;
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(grid[i][j]==2)
-                {
-                q.push({i,j});
-                }
-                else if(grid[i][j]==1)
+
+    public int orangesRotting(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+
+        Queue<int[]> q = new ArrayDeque<>();
+        int fresh = 0;
+
+        // directions: up, down, left, right
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
+
+        // collect initial rotten + count fresh
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 2) {
+                    q.offer(new int[]{i, j});
+                } else if (grid[i][j] == 1) {
                     fresh++;
+                }
             }
         }
-        if(fresh==0)
-            return 0;
-      
-        int ans=0;
-        while(!q.empty()){
-            int qsz=q.size();
-            while(qsz--){
-                int x=q.front().first;
-                int y=q.front().second;
-                q.pop();
-                for(int i=0;i<4;i++){
-                    int nx=x+dx[i];
-                    int ny=y+dy[i];
-                    if(nx>=0 and ny>=0 and nx<n and ny<m and grid[nx][ny]==1){
-                        grid[nx][ny]=2;
-                        q.push({nx,ny});
-                        rotten++;
+
+        if (fresh == 0) return 0;
+
+        int minutes = 0;
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+            boolean rottedThisRound = false;
+
+            for (int k = 0; k < size; k++) {
+                int[] cell = q.poll();
+                int x = cell[0], y = cell[1];
+
+                for (int d = 0; d < 4; d++) {
+                    int nx = x + dx[d];
+                    int ny = y + dy[d];
+
+                    if (nx >= 0 && ny >= 0 && nx < n && ny < m && grid[nx][ny] == 1) {
+                        grid[nx][ny] = 2;
+                        fresh--;
+                        q.offer(new int[]{nx, ny});
+                        rottedThisRound = true;
                     }
                 }
             }
-            ans++;
-             if(fresh==rotten)
-            return ans;
+
+            if (rottedThisRound) minutes++;
         }
-       
-        return -1;
+
+        return fresh == 0 ? minutes : -1;
     }
-};
+}

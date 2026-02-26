@@ -16,60 +16,64 @@ Input : 1 2
 Output : 1 2 4
          1 3 4
 
-#include <bits/stdc++.h>
+import java.util.*;
 
-using namespace std;
+public class Main {
 
-void findpaths(int x,int y,int rows,int cols,vector<vector<int>> mat,vector<vector<bool>>&visited,vector<int> path,vector<vector<int>>&allpaths)
-{
-    if(x==rows-1 && y==cols-1)
-    {
-        path.push_back(mat[x][y]);
-        allpaths.push_back(path);
-        return;
+    static void findPaths(int x, int y, int rows, int cols,
+                          int[][] mat, boolean[][] visited,
+                          List<Integer> path,
+                          List<List<Integer>> allPaths) {
+
+        // reached destination
+        if (x == rows - 1 && y == cols - 1) {
+            path.add(mat[x][y]);
+            allPaths.add(new ArrayList<>(path));
+            path.remove(path.size() - 1); // backtrack
+            return;
+        }
+
+        // invalid
+        if (x < 0 || x >= rows || y < 0 || y >= cols || visited[x][y])
+            return;
+
+        path.add(mat[x][y]);
+        visited[x][y] = true;
+
+        // right
+        findPaths(x, y + 1, rows, cols, mat, visited, path, allPaths);
+        // down
+        findPaths(x + 1, y, rows, cols, mat, visited, path, allPaths);
+
+        visited[x][y] = false;
+        path.remove(path.size() - 1); // backtrack
     }
-    
-    if(x<0 || x>=rows || y<0 || y>=cols || visited[x][y])
-        return;
-    
-    path.push_back(mat[x][y]);
-    visited[x][y]=true;
-    findpaths(x,y+1,rows,cols,mat,visited,path,allpaths);
-    findpaths(x+1,y,rows,cols,mat,visited,path,allpaths);
-    visited[x][y]=false;
-    path.pop_back();
-    
-}
-int main()
-{
-    int rows,cols;
-    cin>>rows>>cols;
-	vector<vector<int>> mat(rows,vector<int> (cols,0));
-	vector<vector<bool>> visited(rows,vector<bool> (cols,false));
-	
-	for(int i=0;i<rows;++i)
-	{
-	    for(int j=0;j<cols;++j)
-	    {
-	        cin>>mat[i][j];
-	    }
-	}
-	
 
-	vector<int> path;
-	vector<vector<int>> allpaths;
-	findpaths(0,0,rows,cols,mat,visited,path,allpaths);
-	cout<<allpaths.size()<<endl;
-	for(int i=0;i<allpaths.size();++i)
-	{
-	    for(int j=0;j<allpaths[i].size();++j)
-	    {
-	        cout<<allpaths[i][j]<<" ";
-	    }
-	    
-	    cout<<endl;
-	}
-	
-	return 0;
-}
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
+        int rows = sc.nextInt();
+        int cols = sc.nextInt();
+
+        int[][] mat = new int[rows][cols];
+        boolean[][] visited = new boolean[rows][cols];
+
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                mat[i][j] = sc.nextInt();
+
+        List<Integer> path = new ArrayList<>();
+        List<List<Integer>> allPaths = new ArrayList<>();
+
+        findPaths(0, 0, rows, cols, mat, visited, path, allPaths);
+
+        System.out.println(allPaths.size());
+
+        for (List<Integer> p : allPaths) {
+            for (int val : p) {
+                System.out.print(val + " ");
+            }
+            System.out.println();
+        }
+    }
+}

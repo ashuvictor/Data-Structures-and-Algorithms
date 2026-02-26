@@ -1,23 +1,31 @@
 https://practice.geeksforgeeks.org/problems/left-view-of-binary-tree/1
-vector<int> leftView(Node *root)
-{
-   vector<int>ans;
-   if(root==NULL)
-   return ans;
-   queue<Node*>q;
-   q.push(root);
-   while(!q.empty()){
-       int sz=q.size();
-       ans.push_back(q.front()->data);
-       while(sz--){
-           Node* t;
-           t=q.front();
-           q.pop();
-           if(t->left)
-           q.push(t->left);
-           if(t->right)
-           q.push(t->right);
-       }
-   }
-   return ans;
+import java.util.*;
+
+class Solution {
+
+    public List<Integer> leftView(Node root) {
+        List<Integer> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+
+            // first node of this level
+            ans.add(queue.peek().data);
+
+            while (size-- > 0) {
+                Node curr = queue.poll();
+
+                if (curr.left != null)
+                    queue.offer(curr.left);
+                if (curr.right != null)
+                    queue.offer(curr.right);
+            }
+        }
+
+        return ans;
+    }
 }

@@ -1,44 +1,41 @@
 https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+import java.util.*;
+
 class Solution {
-public:
-   void solve(string digits,string output,int index,vector<string>&ans,unordered_map<int,string>mp)
-   {
-       if(index>=digits.size())
-       {
-           ans.push_back(output);
-           return;
-       }
-       int number=digits[index]-'0';
-       string value=mp[number];
-       for(int i=0;i<value.length();i++){
-           output.push_back(value[i]);
-           solve(digits,output,index+1,ans,mp);
-           output.pop_back();
-       }
-   }
-    vector<string> letterCombinations(string digits) {
-        vector<string>ans;
-        if(digits.length()==0)
-            return ans;
-         unordered_map<int,string>mp;
-         mp[2]="abc";
 
-        mp[3]="def";
+    private void solve(String digits, StringBuilder output, int index,
+                       List<String> ans, Map<Character, String> mp) {
 
-        mp[4]="ghi";
+        if (index >= digits.length()) {
+            ans.add(output.toString());
+            return;
+        }
 
-        mp[5]="jkl";
+        char digit = digits.charAt(index);
+        String value = mp.get(digit);
 
-        mp[6]="mno";
+        for (int i = 0; i < value.length(); i++) {
+            output.append(value.charAt(i));
+            solve(digits, output, index + 1, ans, mp);
+            output.deleteCharAt(output.length() - 1); // backtrack
+        }
+    }
 
-        mp[7]="pqrs";
+    public List<String> letterCombinations(String digits) {
+        List<String> ans = new ArrayList<>();
+        if (digits.length() == 0) return ans;
 
-        mp[8]="tuv";
+        Map<Character, String> mp = new HashMap<>();
+        mp.put('2', "abc");
+        mp.put('3', "def");
+        mp.put('4', "ghi");
+        mp.put('5', "jkl");
+        mp.put('6', "mno");
+        mp.put('7', "pqrs");
+        mp.put('8', "tuv");
+        mp.put('9', "wxyz");
 
-        mp[9]="wxyz";
-        string output;
-        int index=0;
-        solve(digits,output,index,ans,mp);
+        solve(digits, new StringBuilder(), 0, ans, mp);
         return ans;
     }
-};
+}

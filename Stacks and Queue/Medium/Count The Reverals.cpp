@@ -13,19 +13,29 @@ that can be formed in lesser reversals.
 https://practice.geeksforgeeks.org/problems/count-the-reversals0401/1/
 
 
-int countRev (string s)
-{
-   if(s.size()&1) //length has to be even
-   return -1;
-   int open=0,close=0;
-   for(int i=0;i<s.size();i++){
-       if(s[i]=='{')open++;
-       else{
-           if(open==0)close++;
-           else
-           open--;
-       }
-   }
-   int ans=ceil(close/2.0)+ceil(open/2.0);
-   return ans;
+class Solution {
+
+    public int countRev(String s) {
+
+        // odd length cannot be balanced
+        if (s.length() % 2 == 1)
+            return -1;
+
+        int open = 0, close = 0;
+
+        for (char ch : s.toCharArray()) {
+            if (ch == '{') {
+                open++;
+            } else {
+                if (open == 0)
+                    close++;
+                else
+                    open--;
+            }
+        }
+
+        // ceil(close/2) + ceil(open/2)
+        int ans = (close + 1) / 2 + (open + 1) / 2;
+        return ans;
+    }
 }

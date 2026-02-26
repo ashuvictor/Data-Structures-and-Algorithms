@@ -23,79 +23,62 @@ https://practice.geeksforgeeks.org/problems/replace-os-with-xs0052/1/?page=1&dif
 
 
 
+import java.util.*;
 
-class Solution
-{
-public:
-    void helper(vector<vector<char>>&mat,int i,int j)
-    {
-        if(i<0 || j<0 || i>=mat.size() || j>=mat[0].size() || mat[i][j]!='O')
-        {
+class Solution {
+
+    private void helper(char[][] mat, int i, int j) {
+        if (i < 0 || j < 0 || i >= mat.length || j >= mat[0].length || mat[i][j] != 'O')
             return;
-        }
-        mat[i][j]='#';
-        helper(mat,i-1,j);
-        helper(mat,i+1,j);
-        helper(mat,i,j-1);
-        helper(mat,i,j+1);
+
+        mat[i][j] = '#';
+
+        helper(mat, i - 1, j);
+        helper(mat, i + 1, j);
+        helper(mat, i, j - 1);
+        helper(mat, i, j + 1);
     }
-    vector<vector<char>> fill(int n, int m, vector<vector<char>> mat)
-    {
-        n=mat.size();
-        m=mat[0].size();
-        // populate the 'O's which are connected to the boundary
-        for(int j=0;j<mat[0].size();j++)
-        {
-            if(mat[0][j]=='O')
-            {
-                helper(mat,0,j);
+
+    public char[][] fill(int n, int m, char[][] mat) {
+        n = mat.length;
+        m = mat[0].length;
+
+        // Top boundary
+        for (int j = 0; j < m; j++) {
+            if (mat[0][j] == 'O') helper(mat, 0, j);
+        }
+
+        // Right boundary
+        for (int i = 0; i < n; i++) {
+            if (mat[i][m - 1] == 'O') helper(mat, i, m - 1);
+        }
+
+        // Bottom boundary
+        for (int j = m - 1; j >= 0; j--) {
+            if (mat[n - 1][j] == 'O') helper(mat, n - 1, j);
+        }
+
+        // Left boundary
+        for (int i = n - 1; i >= 0; i--) {
+            if (mat[i][0] == 'O') helper(mat, i, 0);
+        }
+
+        // Convert remaining O → X
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == 'O')
+                    mat[i][j] = 'X';
             }
         }
-        for(int i=0;i<mat.size();i++)
-        {
-            if(mat[i][m-1]=='O')
-            {
-                helper(mat,i,m-1);
+
+        // Restore boundary-connected cells (# → O)
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == '#')
+                    mat[i][j] = 'O';
             }
         }
-        for(int j=mat[0].size()-1;j>=0;j--)
-        {
-            if(mat[n-1][j]=='O')
-            {
-                helper(mat,n-1,j);
-            }
-        }
-        for(int i=n-1;i>=0;i--)
-        {
-            if(mat[i][0]=='O')
-            {
-                helper(mat,i,0);
-            }
-        }
-        
-        // Now fill all the 'O's with 'X'
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<m;j++)
-            {
-                if(mat[i][j]=='O')
-                {
-                    mat[i][j]='X';
-                }
-            }
-        }
-        
-        // Now restore the '#' cause they are actually 'O's
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<m;j++)
-            {
-                if(mat[i][j]=='#')
-                {
-                    mat[i][j]='O';
-                }
-            }
-        }
+
         return mat;
     }
-};
+}

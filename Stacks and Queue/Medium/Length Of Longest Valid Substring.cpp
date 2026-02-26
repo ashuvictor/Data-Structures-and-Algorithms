@@ -15,25 +15,32 @@ Output: 6
 Explanation: The longest valid 
 substring is "()(())". Length = 6.
 
+import java.util.*;
 
 class Solution {
-  public:
-    int findMaxLen(string s) {
-       stack<int>st;
-       st.push(-1);
-       int ans=0;
-       for(int i=0;i<s.size();i++){
-           if(s[i]=='(')
-           st.push(i);
-           else{
-               st.pop();
-               if(st.empty())
-               st.push(i);
-               else{
-                   ans=max(ans,i-st.top());
-               }
-           }
-       }
-       return ans;
+
+    public int findMaxLen(String s) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        stack.push(-1); // base index
+
+        int ans = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+
+            if (ch == '(') {
+                stack.push(i);
+            } else {
+                stack.pop();
+
+                if (stack.isEmpty()) {
+                    stack.push(i);
+                } else {
+                    ans = Math.max(ans, i - stack.peek());
+                }
+            }
+        }
+
+        return ans;
     }
-};
+}

@@ -20,20 +20,22 @@ https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
 
 
 class Solution {
-public:
-    int minAddToMakeValid(string s) {
-     int open=0;
-        int close=0;
-        for(int i=0;i<s.size();i++){
-            if(s[i]=='(')
+
+    public int minAddToMakeValid(String s) {
+        int open = 0;
+        int close = 0;
+
+        for (char ch : s.toCharArray()) {
+            if (ch == '(') {
                 open++;
-            else{
-                if(open==0)
+            } else {
+                if (open == 0)
                     close++;
                 else
                     open--;
             }
         }
-        return open+close;
+
+        return open + close;
     }
-};
+}

@@ -30,36 +30,46 @@ The converted BST will be
  https://practice.geeksforgeeks.org/problems/binary-tree-to-bst/1
 
 
-class Solution{
-  public:
-    // The given root is the root of the Binary Tree
-    // Return the root of the generated BST
-    void inorder_tree(Node* root,vector<int>&v){
-    if(!root){
-        return;
-    }
-    inorder_tree(root->left,v);
-    v.push_back(root->data);
-    inorder_tree(root->right,v);
-}
-    void inorder_bst(Node* root,vector<int>v,int &i){
-    if(!root){
-        return;
-    }
-    inorder_bst(root->left,v,i);
- root->data=v[i];
-    i++;
-    inorder_bst(root->right,v,i);
-}
-    Node *binaryTreeToBST (Node *root)
-    {
-vector<int>v;
-inorder_tree(root,v);
-sort(v.begin(),v.end());
-int i=0;
-inorder_bst(root,v,i);
-return root;
+import java.util.*;
 
+class Solution {
 
+    // Step 1: Store inorder values
+    private void inorderTree(Node root, List<Integer> list) {
+        if (root == null) return;
+
+        inorderTree(root.left, list);
+        list.add(root.data);
+        inorderTree(root.right, list);
     }
-};
+
+    // Step 3: Refill inorder values
+    private void inorderBST(Node root, List<Integer> list, int[] idx) {
+        if (root == null) return;
+
+        inorderBST(root.left, list, idx);
+
+        root.data = list.get(idx[0]);
+        idx[0]++;
+
+        inorderBST(root.right, list, idx);
+    }
+
+    public Node binaryTreeToBST(Node root) {
+        if (root == null) return null;
+
+        List<Integer> list = new ArrayList<>();
+
+        // store values
+        inorderTree(root, list);
+
+        // sort values
+        Collections.sort(list);
+
+        // refill tree
+        int[] idx = {0}; // simulate reference
+        inorderBST(root, list, idx);
+
+        return root;
+    }
+}

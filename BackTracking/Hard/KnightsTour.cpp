@@ -1,63 +1,56 @@
-#include <bits/stdc++.h>
+import java.util.*;
 
-using namespace std;
+public class Main {
 
-#define endl "\n"
+    static void solve(int n, int i, int j, int cnt,
+                      int[][] mat, boolean[][] visited) {
 
-void solve(int n,int i,int j,int cnt,vector<vector<int>>&mat,vector<vector<bool>>&visited)
-{
-    if(i<0 || j<0 || i>=n || j>=n)
-        return;
-        
-    if(visited[i][j])
-        return;
-        
-    if(cnt==(n*n-1))
-       {
-           mat[i][j]=cnt;
-           return;
-       }
-        
-    visited[i][j]=true;
-    mat[i][j]=cnt;
-   
-    solve(n,i-1,j+2,cnt+1,mat,visited);
-    solve(n,i-1,j-2,cnt+1,mat,visited);
-    solve(n,i+1,j+2,cnt+1,mat,visited);
-    solve(n,i+1,j-2,cnt+1,mat,visited);
-     solve(n,i-2,j+1,cnt+1,mat,visited);
-    solve(n,i-2,j-1,cnt+1,mat,visited);
-    solve(n,i+2,j+1,cnt+1,mat,visited);
-    solve(n,i+2,j-1,cnt+1,mat,visited);
-    visited[i][j]=false;
-    // mat[i][j]=0;
-    
-    return;
-    
-}
+        // out of bounds
+        if (i < 0 || j < 0 || i >= n || j >= n)
+            return;
 
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);cout.tie(NULL);
-    
-    int n;
-    cin>>n;
-    vector<vector<int>> mat(n,vector<int>(n,0));
-  
-    vector<vector<bool>> visited(n,vector<bool>(n,false));
-    solve(n,0,0,0,mat,visited);
-    
-        for(int i=0;i<n;++i)
-        {
-            for(int j=0;j<n;++j)
-            {
-                cout<<mat[i][j]<<" ";
-            }
-            cout<<endl;
+        // already visited
+        if (visited[i][j])
+            return;
+
+        // last move
+        if (cnt == (n * n - 1)) {
+            mat[i][j] = cnt;
+            return;
         }
-    
-    
-   
-     return 0;
+
+        visited[i][j] = true;
+        mat[i][j] = cnt;
+
+        // 8 knight moves
+        solve(n, i - 1, j + 2, cnt + 1, mat, visited);
+        solve(n, i - 1, j - 2, cnt + 1, mat, visited);
+        solve(n, i + 1, j + 2, cnt + 1, mat, visited);
+        solve(n, i + 1, j - 2, cnt + 1, mat, visited);
+        solve(n, i - 2, j + 1, cnt + 1, mat, visited);
+        solve(n, i - 2, j - 1, cnt + 1, mat, visited);
+        solve(n, i + 2, j + 1, cnt + 1, mat, visited);
+        solve(n, i + 2, j - 1, cnt + 1, mat, visited);
+
+        visited[i][j] = false; // backtrack
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        int[][] mat = new int[n][n];
+        boolean[][] visited = new boolean[n][n];
+
+        solve(n, 0, 0, 0, mat, visited);
+
+        // print board
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print(mat[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
 }

@@ -1,17 +1,31 @@
-void solve(vector<int>&A,vector<vector<int>>&ans,int i){
-    if(i==A.size())
-    {
-        ans.push_back(A);
-        return;
+import java.util.*;
+
+class Solution {
+
+    private void solve(int[] A, List<List<Integer>> ans, int i) {
+        if (i == A.length) {
+            List<Integer> perm = new ArrayList<>();
+            for (int num : A) perm.add(num);
+            ans.add(perm);
+            return;
+        }
+
+        for (int j = i; j < A.length; j++) {
+            swap(A, i, j);
+            solve(A, ans, i + 1);
+            swap(A, i, j); // backtrack
+        }
     }
-    for(int j=i;j<A.size();j++){
-        swap(A[i],A[j]);
-        solve(A,ans,i+1);
-        swap(A[i],A[j]);
+
+    private void swap(int[] A, int i, int j) {
+        int temp = A[i];
+        A[i] = A[j];
+        A[j] = temp;
     }
-}
-vector<vector<int> > Solution::permute(vector<int> &A) {
-    vector<vector<int>>ans;
-    solve(A,ans,0);
-    return ans;
+
+    public List<List<Integer>> permute(int[] A) {
+        List<List<Integer>> ans = new ArrayList<>();
+        solve(A, ans, 0);
+        return ans;
+    }
 }

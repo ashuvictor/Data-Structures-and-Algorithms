@@ -1,22 +1,35 @@
 // https://leetcode.com/problems/valid-parentheses/
+
+
+import java.util.*;
+
 class Solution {
-public:
-    bool isValid(string s) {
-        stack<char>st;
-        for(auto it:s){
-            if(it=='(' or it=='{' or it=='[')
-                st.push(it);
-            else{
-                if(st.empty())
+
+    public boolean isValid(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+
+        for (char ch : s.toCharArray()) {
+
+            // push opening brackets
+            if (ch == '(' || ch == '{' || ch == '[') {
+                stack.push(ch);
+            } else {
+                // closing bracket without opening
+                if (stack.isEmpty())
                     return false;
-                char ch=st.top();
-                st.pop();
-                if((it==')' and ch=='(') or (it=='}' and ch=='{') or (it==']' and ch=='[') )
+
+                char top = stack.pop();
+
+                if ((ch == ')' && top == '(') ||
+                    (ch == '}' && top == '{') ||
+                    (ch == ']' && top == '[')) {
                     continue;
-                else
+                } else {
                     return false;
+                }
             }
         }
-        return st.empty();
+
+        return stack.isEmpty();
     }
-};
+}

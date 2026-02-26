@@ -2,36 +2,62 @@
 
 
 
-void inorder(node* curr, node*& prev)
-{
-    // Base case
-    if (curr == NULL)
-        return;
-    inorder(curr->left, prev);
-    prev->left = NULL;
-    prev->right = curr;
-    prev = curr;
-    inorder(curr->right, prev);
+class Solution {
+    Node prev = null;
+
+    public Node flatten(Node root) {
+        inorder(root);
+        return head;
+    }
+
+    Node head = null;
+
+    private void inorder(Node curr) {
+        if (curr == null) return;
+
+        inorder(curr.left);
+
+        if (prev == null) {
+            head = curr;
+        } else {
+            prev.left = null;
+            prev.right = curr;
+        }
+        prev = curr;
+
+        inorder(curr.right);
+    }
 }
- 
-// Function to flatten binary tree using
-// level order traversal
-node* flatten(node* parent)
-{
-    // Dummy node
-    node* dummy = new node(-1);
- 
-    // Pointer to previous element
-    node* prev = dummy;
- 
-    // Calling in-order traversal
-    inorder(parent, prev);
- 
-    prev->left = NULL;
-    prev->right = NULL;
-    node* ret = dummy->right;
- 
-    // Delete dummy node
-    delete dummy;
-    return ret;
+
+
+
+
+class Solution {
+
+    private void inorder(Node curr, Node[] prev) {
+        if (curr == null) return;
+
+        inorder(curr.left, prev);
+
+        prev[0].left = null;
+        prev[0].right = curr;
+        prev[0] = curr;
+
+        inorder(curr.right, prev);
+    }
+
+    public Node flatten(Node root) {
+        if (root == null) return null;
+
+        Node dummy = new Node(-1);
+        Node[] prev = {dummy}; // simulate reference
+
+        inorder(root, prev);
+
+        // last node cleanup
+        prev[0].left = null;
+        prev[0].right = null;
+
+        return dummy.right;
+    }
 }

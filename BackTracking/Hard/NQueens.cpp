@@ -1,10 +1,12 @@
+import java.util.*;
+
 class Solution {
-public:
-    bool isSafe(vector<string>&temp,int i,int j){
-        for(int x=0;x<i;x++){
-            for(int y=0;y<temp.size();y++){
-                if(temp[x][y]=='Q'){
-                    if(y==j or(abs(x-i)==abs(y-j))){
+
+    private boolean isSafe(List<StringBuilder> board, int i, int j) {
+        for (int x = 0; x < i; x++) {
+            for (int y = 0; y < board.size(); y++) {
+                if (board.get(x).charAt(y) == 'Q') {
+                    if (y == j || Math.abs(x - i) == Math.abs(y - j)) {
                         return false;
                     }
                 }
@@ -12,25 +14,33 @@ public:
         }
         return true;
     }
-    void fun(int i,int n,vector<vector<string>>&ans,vector<string>&temp){
-        if(i==n){
-            ans.push_back(temp);
+
+    private void fun(int i, int n, List<List<String>> ans, List<StringBuilder> board) {
+        if (i == n) {
+            List<String> temp = new ArrayList<>();
+            for (StringBuilder row : board) temp.add(row.toString());
+            ans.add(temp);
             return;
         }
-        for(int j=0;j<n;j++){
-            if(isSafe(temp,i,j))
-            {
-                temp[i][j]='Q';
-                fun(i+1,n,ans,temp);
-                temp[i][j]='.';
+
+        for (int j = 0; j < n; j++) {
+            if (isSafe(board, i, j)) {
+                board.get(i).setCharAt(j, 'Q');
+                fun(i + 1, n, ans, board);
+                board.get(i).setCharAt(j, '.'); // backtrack
             }
         }
-        return;
     }
-    vector<vector<string>> solveNQueens(int n) {
-        vector<vector<string>>ans;
-        vector<string>temp(n,string(n,'.'));
-        fun(0,n,ans,temp);
+
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> ans = new ArrayList<>();
+
+        List<StringBuilder> board = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            board.add(new StringBuilder(".".repeat(n)));
+        }
+
+        fun(0, n, ans, board);
         return ans;
     }
-};
+}

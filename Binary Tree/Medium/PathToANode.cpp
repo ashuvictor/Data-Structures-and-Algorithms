@@ -1,37 +1,34 @@
 https://www.interviewbit.com/problems/path-to-given-node/
-bool getPath(TreeNode *root, vector<int> &arr, int x) {
-    // if root is NULL
-    // there is no path
-    if (!root)
+import java.util.*;
+
+class Solution {
+
+    private boolean getPath(TreeNode root, List<Integer> path, int target) {
+        if (root == null)
+            return false;
+
+        // add current node
+        path.add(root.val);
+
+        // if target found
+        if (root.val == target)
+            return true;
+
+        // search left or right
+        if (getPath(root.left, path, target) ||
+            getPath(root.right, path, target))
+            return true;
+
+        // backtrack
+        path.remove(path.size() - 1);
         return false;
-     
-    // push the node's value in 'arr'
-    arr.push_back(root->val);   
-     
-    // if it is the required node
-    // return true
-    if (root->val == x)   
-        return true;
-     
-    // else check whether the required node lies
-    // in the left subtree or right subtree of
-    // the current node
-    if (getPath(root->left, arr, x) ||
-        getPath(root->right, arr, x))
-        return true;
-     
-    // required node does not lie either in the
-    // left or right subtree of the current node
-    // Thus, remove current node's value from
-    // 'arr'and then return false   
-    arr.pop_back();
-    return false;  
-}
-vector<int> Solution::solve(TreeNode* A, int B) {
-    vector<int> arr; 
-    if(A == NULL) {
-        return arr; 
     }
-    getPath(A, arr, B);
-    return arr; 
+
+    public List<Integer> solve(TreeNode root, int target) {
+        List<Integer> path = new ArrayList<>();
+        if (root == null) return path;
+
+        getPath(root, path, target);
+        return path;
+    }
 }

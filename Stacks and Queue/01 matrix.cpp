@@ -6,44 +6,57 @@ Given an m x n binary matrix mat, return the distance of the nearest 0 for each 
 The distance between two adjacent cells is 1.
 
 
+import java.util.*;
+
 class Solution {
-public:
-    vector<int> di = {1, 0, -1, 0};
-    vector<int> dj = {0, 1, 0, -1};
 
-    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
-        int m = mat.size();
-        int n = mat[0].size();
+    public int[][] updateMatrix(int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
 
-        vector<vector<int>> dis(m, vector<int> (n, -1));
-        queue<pair<int, int>> q;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
+        int[][] dis = new int[m][n];
+        Queue<int[]> q = new ArrayDeque<>();
+
+        int[] di = {1, 0, -1, 0};
+        int[] dj = {0, 1, 0, -1};
+
+        // initialize distances
+        for (int i = 0; i < m; i++) {
+            Arrays.fill(dis[i], -1);
+        }
+
+        // push all zeros (multi-source BFS)
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (mat[i][j] == 0) {
                     dis[i][j] = 0;
-                    q.push({i, j});
+                    q.offer(new int[]{i, j});
                 }
             }
         }
-        
-        while (!q.empty()) {
-            int i = q.front().first;
-            int j = q.front().second;
-            q.pop();
-            
-            for (int dir = 0; dir < 4; ++dir) {
+
+        // BFS
+        while (!q.isEmpty()) {
+            int[] cell = q.poll();
+            int i = cell[0], j = cell[1];
+
+            for (int dir = 0; dir < 4; dir++) {
                 int ii = i + di[dir];
                 int jj = j + dj[dir];
-                if (ii >= 0 and ii < m and jj >= 0 and jj < n and dis[ii][jj] == -1) {
+
+                if (ii >= 0 && ii < m && jj >= 0 && jj < n && dis[ii][jj] == -1) {
                     dis[ii][jj] = dis[i][j] + 1;
-                    q.push({ii, jj});
+                    q.offer(new int[]{ii, jj});
                 }
             }
         }
-        
+
         return dis;
     }
-};
+}
+
+
+
 
 
 

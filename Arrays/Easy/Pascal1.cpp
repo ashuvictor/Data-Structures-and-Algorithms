@@ -2,18 +2,23 @@
 Given an integer numRows, return the first numRows of Pascal's triangle.
 https://leetcode.com/problems/pascals-triangle/
 */
+import java.util.*;
+
 class Solution {
-public:
-    vector<vector<int>> generate(int numRows) {
-        vector<vector<int>>ans(numRows);
-        for(int i=0;i<numRows;i++){
-            ans[i].resize(i+1);
-            ans[i][0]=ans[i][i]=1;
-            for(int j=1;j<i;j++){
-                ans[i][j]=ans[i-1][j-1]+ans[i-1][j];
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> ans = new ArrayList<>();
+
+        for (int i = 0; i < numRows; i++) {
+            List<Integer> row = new ArrayList<>();
+
+            for (int j = 0; j <= i; j++) {
+                if (j == 0 || j == i) row.add(1);
+                else row.add(ans.get(i - 1).get(j - 1) + ans.get(i - 1).get(j));
             }
+
+            ans.add(row);
         }
+
         return ans;
-        
     }
-};
+}

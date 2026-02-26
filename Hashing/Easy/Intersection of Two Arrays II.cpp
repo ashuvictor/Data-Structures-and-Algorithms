@@ -6,19 +6,32 @@ Example 1:
 
 Input: nums1 = [1,2,2,1], nums2 = [2,2]
 Output: [2,2]
+import java.util.*;
+
 class Solution {
-public:
-    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
-        unordered_map<int,int>mp;
-        vector<int>ans;
-        for(auto x:nums1)
-            mp[x]++;
-        for(auto y:nums2){
-            if(mp[y]>0)
-            {
-                ans.push_back(y);mp[y]--;
+    public int[] intersect(int[] nums1, int[] nums2) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        List<Integer> ans = new ArrayList<>();
+
+        // Count elements from nums1
+        for (int x : nums1) {
+            map.put(x, map.getOrDefault(x, 0) + 1);
+        }
+
+        // Match elements from nums2
+        for (int y : nums2) {
+            if (map.getOrDefault(y, 0) > 0) {
+                ans.add(y);
+                map.put(y, map.get(y) - 1);
             }
         }
-        return ans;
+
+        // Convert List → array
+        int[] res = new int[ans.size()];
+        for (int i = 0; i < ans.size(); i++) {
+            res[i] = ans.get(i);
+        }
+
+        return res;
     }
-};
+}

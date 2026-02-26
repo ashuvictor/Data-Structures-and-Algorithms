@@ -17,22 +17,72 @@ We then place spaces before those characters.
 
 
 class Solution {
-public:
-    string addSpaces(string s, vector<int>& spaces) {
-         string res="";
-    int i=0,j=0;
-    while(i<s.size() and j<spaces.size()){
-        if(i==spaces[j]){
-            res+=" ";
-            j++;
+    public String addSpaces(String s, int[] spaces) {
+        StringBuilder res = new StringBuilder();
+
+        int i = 0, j = 0;
+
+        while (i < s.length() && j < spaces.length) {
+            if (i == spaces[j]) {
+                res.append(' ');
+                j++;
+            }
+            res.append(s.charAt(i));
+            i++;
         }
-        res+=s[i];
-        i++;
+
+        // Add remaining characters
+        while (i < s.length()) {
+            res.append(s.charAt(i));
+            i++;
+        }
+
+        return res.toString();
     }
-    while(i<s.size()){
-        res+=s[i];
-        i++;
+}
+
+
+
+Why StringBuilder?
+
+Using:
+
+res += " "
+
+creates new strings repeatedly ❌ (slow)
+
+StringBuilder = O(n) efficient ✅
+
+🧪 Example
+
+Input:
+
+s = "LeetcodeHelpsMeLearn"
+spaces = [8,13,15]
+
+Output:
+
+"Leetcode Helps Me Learn"
+⏱ Complexity
+
+Time: O(n)
+
+Space: O(n)
+
+⚡ Cleaner Java Version (For-each style)
+class Solution {
+    public String addSpaces(String s, int[] spaces) {
+        StringBuilder sb = new StringBuilder();
+        int spaceIndex = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            if (spaceIndex < spaces.length && i == spaces[spaceIndex]) {
+                sb.append(' ');
+                spaceIndex++;
+            }
+            sb.append(s.charAt(i));
+        }
+
+        return sb.toString();
     }
-    return res;
-    }
-};
+}

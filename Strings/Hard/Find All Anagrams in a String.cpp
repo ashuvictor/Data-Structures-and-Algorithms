@@ -23,49 +23,69 @@ The substring with start index = 2 is "ab", which is an anagram of "ab".
 
 pproach 1: Brute Force (Finding all substrings of size (p) and cheacking if it is anagram or not)
 Status: TLE
+import java.util.*;
+
 class Solution {
-public:
-    bool isAnagram(string s,string t){
-        sort(s.begin(),s.end());
-        sort(t.begin(),t.end());
-        return s==t;
+    private boolean isAnagram(String s, String t) {
+        char[] a = s.toCharArray();
+        char[] b = t.toCharArray();
+        Arrays.sort(a);
+        Arrays.sort(b);
+        return Arrays.equals(a, b);
     }
-    vector<int> findAnagrams(string s, string p) {
-        vector<int>idx;
-        int n=s.size();
-        int m=p.size();
-        for(int i=0;i<=n-m;i++){
-            string temp=s.substr(i,m);
-            if(isAnagram(temp,p))
-                idx.push_back(i);
+
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> idx = new ArrayList<>();
+        int n = s.length();
+        int m = p.length();
+
+        for (int i = 0; i <= n - m; i++) {
+            String temp = s.substring(i, i + m);
+            if (isAnagram(temp, p)) {
+                idx.add(i);
+            }
         }
+
         return idx;
     }
-};
+}
 
 
 
+
+import java.util.*;
 
 class Solution {
-public:
-    vector<int> findAnagrams(string s, string p) {
-    vector<int>ans;
-        if(p.size()>s.size())
-            return ans;
-        vector<int>a(26,0);
-        vector<int>b(26,0);
-        for(int i=0;i<p.size();i++){
-            a[p[i]-'a']++;
-            b[s[i]-'a']++;
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> res = new ArrayList<>();
+
+        if (s.length() < p.length()) return res;
+
+        int[] count = new int[26];
+
+        // Count p chars
+        for (char c : p.toCharArray()) {
+            count[c - 'a']++;
         }
-        for(int i=p.size();i<s.size();i++){
-            if(a==b)
-                ans.push_back(i-p.size());
-            b[s[i-p.size()]-'a']--;
-            b[s[i]-'a']++;
+
+        int left = 0, right = 0, needed = p.length();
+
+        while (right < s.length()) {
+            if (count[s.charAt(right) - 'a']-- > 0) {
+                needed--;
+            }
+            right++;
+
+            if (needed == 0) res.add(left);
+
+            if (right - left == p.length()) {
+                if (count[s.charAt(left) - 'a']++ >= 0) {
+                    needed++;
+                }
+                left++;
+            }
         }
-        if(a==b)
-            ans.push_back(s.size()-p.size());
-        return ans;
+
+        return res;
     }
-};
+}

@@ -39,15 +39,21 @@ Where is Bubble sort algorithm used?
 Due to its simplicity, bubble sort is often used to introduce the concept of a sorting algorithm. 
 In computer graphics, it is popular for its capability to detect a very small error (like a swap of just two elements) in almost-sorted arrays and fix it with just linear complexity (2n). 
 
+class Solution {
 
-void bubbleSort(int arr[], int n)
-{
-    int i, j;
-    for (i = 0; i < n - 1; i++)
- 
-        // Last i elements are already
-        // in place
-        for (j = 0; j < n - i - 1; j++)
-            if (arr[j] > arr[j + 1])
-                swap(arr[j], arr[j + 1]);
+    public void bubbleSort(int[] arr, int n) {
+        for (int i = 0; i < n - 1; i++) {
+
+            // Last i elements already sorted
+            for (int j = 0; j < n - i - 1; j++) {
+
+                if (arr[j] > arr[j + 1]) {
+                    // swap
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+    }
 }

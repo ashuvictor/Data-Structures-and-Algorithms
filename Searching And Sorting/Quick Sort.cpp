@@ -1,76 +1,55 @@
-//left has all small and right has all big
-#include<iostream>
-using namespace std;
+public class Main {
 
+    static int partition(int[] arr, int s, int e) {
+        int pivot = arr[s];
 
-int partition( int arr[], int s, int e) {
-
-    int pivot = arr[s];
-
-    int cnt = 0;
-    for(int i = s+1; i<=e; i++) {
-        if(arr[i] <=pivot) {
-            cnt++;
+        int cnt = 0;
+        for (int i = s + 1; i <= e; i++) {
+            if (arr[i] <= pivot) cnt++;
         }
+
+        // Place pivot at correct position
+        int pivotIndex = s + cnt;
+        swap(arr, pivotIndex, s);
+
+        int i = s, j = e;
+
+        while (i < pivotIndex && j > pivotIndex) {
+
+            while (arr[i] <= pivot) i++;
+            while (arr[j] > pivot) j--;
+
+            if (i < pivotIndex && j > pivotIndex) {
+                swap(arr, i++, j--);
+            }
+        }
+
+        return pivotIndex;
     }
 
-    //place pivot at right position
-    int pivotIndex = s + cnt;
-    swap(arr[pivotIndex], arr[s]);
+    static void quickSort(int[] arr, int s, int e) {
+        if (s >= e) return;
 
-    //left and right wala part smbhal lete h 
-    int i = s, j = e;
+        int p = partition(arr, s, e);
 
-    while(i < pivotIndex && j > pivotIndex) {
-
-        while(arr[i] <= pivot) 
-        {
-            i++;
-        }
-
-        while(arr[j] > pivot) {
-            j--;
-        }
-
-        if(i < pivotIndex && j > pivotIndex) {
-            swap(arr[i++], arr[j--]);
-        }
-
+        quickSort(arr, s, p - 1);
+        quickSort(arr, p + 1, e);
     }
 
-    return pivotIndex;
+    static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
 
-}
+    public static void main(String[] args) {
+        int[] arr = {2, 4, 1, 6, 9, 9, 9, 9, 9, 9};
+        int n = arr.length;
 
-void quickSort(int arr[], int s, int e) {
+        quickSort(arr, 0, n - 1);
 
-    //base case
-    if(s >= e) 
-        return ;
-
-    //partitioon karenfe
-    int p = partition(arr, s, e);
-
-    //left part sort karo
-    quickSort(arr, s, p-1);
-
-    //right wala part sort karo
-    quickSort(arr, p+1, e);
-
-}
-
-int main() {
-
-    int arr[10] = {2,4,1,6,9 ,9,9,9,9,9};
-    int n = 10;
-
-    quickSort(arr, 0, n-1);
-
-    for(int i=0; i<n; i++) 
-    {
-        cout << arr[i] << " ";
-    } cout << endl;
-
-
-    return 0;
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
 }

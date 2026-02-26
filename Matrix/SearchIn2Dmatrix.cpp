@@ -6,24 +6,30 @@ The first integer of each row is greater than the last integer of the previous r
 https://leetcode.com/problems/search-a-2d-matrix/
 */
 class Solution {
-public:
-    bool searchMatrix(vector<vector<int>>& matrix, int target) {
-        int m=matrix.size();
-        int n=matrix[0].size();
-        int low=0;
-        int high=(m*n)-1;
-        while(low<=high){
-            int mid=(low+high)>>1;
-            if(matrix[mid/n][mid%n]==target)
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int low = 0;
+        int high = m * n - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            int val = matrix[mid / n][mid % n];
+
+            if (val == target) {
                 return true;
-            else if(matrix[mid/n][mid%n]>target)
-                high=mid-1;
-            else
-                low=mid+1;
+            } else if (val > target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
         }
+
         return false;
     }
-};
+}
 /*Second 
 Given an n x n matrix and a number x, find the position of x in the matrix if it is present in it. Otherwise, print “Not Found”. In the given matrix, every row and column is sorted in increasing order. The designed algorithm should have linear time complexity. 
 

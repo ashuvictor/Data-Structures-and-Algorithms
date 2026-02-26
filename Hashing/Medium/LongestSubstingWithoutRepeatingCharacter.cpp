@@ -9,21 +9,28 @@ Output: 3
 Explanation: The answer is "abc", with the length of 3.
 
 class Solution {
-public:
-    int lengthOfLongestSubstring(string s) {
-        vector<int>mpp(256,-1);
-        int n=s.size();
-        int left=0,right=0,len=0;
-        while(right<n){
-            if(mpp[s[right]]!=-1)
-                left=max(mpp[s[right]]+1,left);
-            mpp[s[right]]=right;
-            len=max(len,right-left+1);
-            right++;
+    public int lengthOfLongestSubstring(String s) {
+        int[] lastSeen = new int[256];
+
+        // Initialize with -1
+        for (int i = 0; i < 256; i++) lastSeen[i] = -1;
+
+        int left = 0, len = 0;
+
+        for (int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+
+            if (lastSeen[c] != -1) {
+                left = Math.max(left, lastSeen[c] + 1);
+            }
+
+            lastSeen[c] = right;
+            len = Math.max(len, right - left + 1);
         }
+
         return len;
     }
-};
+}
 
 
 #include <iostream>

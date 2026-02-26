@@ -15,24 +15,31 @@ https://www.youtube.com/watch?v=37MdIo-MaSU&list=PL-Jc9J83PIiEp9DKNiaQyjuDeg3XSo
 
 max-min=i-j
 
+import java.util.*;
 
-int contiguousElements(vector<int>&nums,int n){
-    int ans=0;
+class Solution {
+    public int contiguousElements(int[] nums, int n) {
+        int ans = 0;
 
-    for(int i=0;i<n-1;i++){
-        int mini=nums[i];
-        int maxa=nums[i];
-        set<int>duplicacy;
-        duplicacy.add(nums[i]);
-    for(int j=i+1;j<n;j++){
-       if(duplicacy.find(nums[j])!=duplicacy.end())
-       break;
-       duplicacy.insert(nums[j]);
-       mini=min(mini,nums[j]);
-       maxa=max(maxa,nums[j]);
-       if((maxa-mini)==(j-i))
-       ans=j-i+1;
+        for (int i = 0; i < n - 1; i++) {
+            int mini = nums[i];
+            int maxa = nums[i];
+            Set<Integer> duplicacy = new HashSet<>();
+            duplicacy.add(nums[i]);
+
+            for (int j = i + 1; j < n; j++) {
+                if (duplicacy.contains(nums[j])) break;
+
+                duplicacy.add(nums[j]);
+                mini = Math.min(mini, nums[j]);
+                maxa = Math.max(maxa, nums[j]);
+
+                if ((maxa - mini) == (j - i)) {
+                    ans = Math.max(ans, j - i + 1);
+                }
+            }
+        }
+
+        return ans;
     }
-    }
-    return ans;
 }

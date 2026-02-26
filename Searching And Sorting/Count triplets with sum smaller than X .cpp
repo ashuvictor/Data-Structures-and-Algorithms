@@ -10,29 +10,31 @@
 // Explanation: Below are triplets with 
 // sum less than 2 (-2, 0, 1) and (-2, 0, 3). 
 // https://practice.geeksforgeeks.org/problems/count-triplets-with-sum-smaller-than-x5549/1
-class Solution{
-	
-	
-	public:
-	long long countTriplets(long long arr[], int n, long long sum)
-	{
-	    // Your code goes here
-	    long long ans=0;
-       sort(arr,arr+n);
-       for(auto k=0;k<n-2;k++){
-           auto i=k+1;
-           auto j=n-1;
-           while(i<j){
-               long long s=arr[k]+arr[i]+arr[j];
-               if(s<sum)
-              {   ans+=(j-i);i++;}
-              else{
-                  j--;
-              }
-           }
-       }
-	return ans;
-	}
-		 
+import java.util.*;
 
-};
+class Solution {
+
+    public long countTriplets(long[] arr, int n, long sum) {
+        long ans = 0;
+
+        Arrays.sort(arr);
+
+        for (int k = 0; k < n - 2; k++) {
+            int i = k + 1;
+            int j = n - 1;
+
+            while (i < j) {
+                long s = arr[k] + arr[i] + arr[j];
+
+                if (s < sum) {
+                    ans += (j - i); // all pairs between i and j valid
+                    i++;
+                } else {
+                    j--;
+                }
+            }
+        }
+
+        return ans;
+    }
+}

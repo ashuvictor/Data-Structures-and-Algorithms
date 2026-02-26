@@ -9,59 +9,63 @@ Input: str = “abba”
 Output: 4 
 Explanation: 
 There are 4 unique substrings. They are: “a”, “ab”, “b”, “ba”.
-#include <bits/stdc++.h>
-using namespace std;
+import java.util.*;
 
-// Function to count all unique
-// distinct character substrings
-int distinctSubstring(string& P, int N)
-{
-	// Hashmap to store all substrings
-	unordered_set<string> S;
+public class Solution {
 
-	// Iterate over all the substrings
-	for (int i = 0; i < N; ++i) {
+    // Function to count all unique distinct character substrings
+    public static int distinctSubstring(String P) {
+        int N = P.length();
+        Set<String> set = new HashSet<>();
 
-		// Boolean array to maintain all
-		// characters encountered so far
-		vector<bool> freq(26, false);
+        // Iterate over all substrings
+        for (int i = 0; i < N; i++) {
 
-		// Variable to maintain the
-		// substring till current position
-		string s;
+            boolean[] freq = new boolean[26];
+            StringBuilder s = new StringBuilder();
 
-		for (int j = i; j < N; ++j) {
+            for (int j = i; j < N; j++) {
+                int pos = P.charAt(j) - 'a';
 
-			// Get the position of the
-			// character in the string
-			int pos = P[j] - 'a';
+                // If character already seen → stop
+                if (freq[pos]) break;
 
-			// Check if the character is
-			// encountred
-			if (freq[pos] == true)
-				break;
+                freq[pos] = true;
 
-			freq[pos] = true;
+                s.append(P.charAt(j));
+                set.add(s.toString());
+            }
+        }
 
-			// Add the current character
-			// to the substring
-			s += P[j];
+        return set.size();
+    }
 
-			// Insert substring in Hashmap
-			S.insert(s);
-		}
-	}
-
-	return S.size();
+    public static void main(String[] args) {
+        String S = "abba";
+        System.out.println(distinctSubstring(S));
+    }
 }
+\
 
-// Driver code
-int main()
-{
-	string S = "abba";
-	int N = S.length();
 
-	cout << distinctSubstring(S, N);
 
-	return 0;
+
+public static int distinctSubstring(String s) {
+    int[] lastSeen = new int[26];
+    Arrays.fill(lastSeen, -1);
+
+    int left = 0, result = 0;
+
+    for (int right = 0; right < s.length(); right++) {
+        int c = s.charAt(right) - 'a';
+
+        if (lastSeen[c] >= left) {
+            left = lastSeen[c] + 1;
+        }
+
+        result += right - left + 1;
+        lastSeen[c] = right;
+    }
+
+    return result;
 }

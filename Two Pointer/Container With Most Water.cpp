@@ -8,22 +8,26 @@ Find two lines that together with the x-axis form a container, such that the con
 Return the maximum amount of water a container can store.
 
 Notice that you may not slant the container.
+class Solution {
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length - 1;
+        int ans = 0;
 
- class Solution {
-public:
-    int maxArea(vector<int>& height) {
-        int left=0;
-        int right=height.size()-1;int ans=0;
-        while(left<right){
-            int left_h=height[left];
-            int right_h=height[right];
-           int min_h=min(left_h,right_h);
-            ans=max(ans,min_h*(right-left));
-            if(left_h<right_h)
+        while (left < right) {
+            int leftH = height[left];
+            int rightH = height[right];
+
+            int minH = Math.min(leftH, rightH);
+            ans = Math.max(ans, minH * (right - left));
+
+            if (leftH < rightH) {
                 left++;
-            else
+            } else {
                 right--;
+            }
         }
+
         return ans;
     }
-};
+}

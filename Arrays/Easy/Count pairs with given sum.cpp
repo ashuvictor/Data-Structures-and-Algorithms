@@ -13,16 +13,23 @@ Explanation:
 arr[0] + arr[1] = 1 + 5 = 6 
 and arr[1] + arr[3] = 5 + 1 = 6.
 
-class Solution{   
-public:
-    int getPairsCount(int arr[], int n, int k) {
-     unordered_map<int,int>mp;
-     int cnt=0;
-     for(int i=0;i<n;i++){
-         if(mp.find(k-arr[i])!=mp.end())
-         cnt+=mp[k-arr[i]];
-         mp[arr[i]]++;
-     }
-     return cnt;
+import java.util.HashMap;
+
+class Solution {
+    public int getPairsCount(int[] arr, int n, int k) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            int complement = k - arr[i];
+
+            if (map.containsKey(complement)) {
+                count += map.get(complement);
+            }
+
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+        }
+
+        return count;
     }
-};
+}

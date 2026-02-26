@@ -24,26 +24,32 @@ Example 1:
 Input: s = "III"
 Output: 3
 Explanation: III = 3.
+import java.util.*;
+
 class Solution {
-public:
-    int romanToInt(string s) {
-                   map<char, int> m;
-   m.insert({ 'I', 1 });
-   m.insert({ 'V', 5 });
-   m.insert({ 'X', 10 });
-   m.insert({ 'L', 50 });
-   m.insert({ 'C', 100 });
-   m.insert({ 'D', 500 });
-   m.insert({ 'M', 1000 });
-   int ans=0;
-   for(int i=0;i<s.length();i++){
-       if(m[s[i]]<m[s[i+1]]){
-           ans+=m[s[i+1]]-m[s[i]];i++;continue;
-       }
-       else{
-           ans+=m[s[i]];
-       }
-   }
-   return ans;
+    public int romanToInt(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
+
+        int ans = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            if (i + 1 < s.length() &&
+                map.get(s.charAt(i)) < map.get(s.charAt(i + 1))) {
+                
+                ans += map.get(s.charAt(i + 1)) - map.get(s.charAt(i));
+                i++; // skip next char
+            } else {
+                ans += map.get(s.charAt(i));
+            }
+        }
+
+        return ans;
     }
-};
+}

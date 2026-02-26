@@ -24,21 +24,23 @@ s and t consist of lowercase English letters.
 
 
 class Solution {
-public:
-    bool isAnagram(string s, string t) {
-        if(s.length()!=t.length())
-            return false;
-        vector<int>count(26,0);
-        for(int i=0;i<s.length();i++){
-            count[s[i]-'a']++;
-          
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) return false;
+
+        int[] count = new int[26];
+
+        // Count characters in s
+        for (int i = 0; i < s.length(); i++) {
+            count[s.charAt(i) - 'a']++;
         }
-        for(int i=0;i<t.length();i++)
-        {
-            if(count[t[i]-'a']==0)
+
+        // Subtract using t
+        for (int i = 0; i < t.length(); i++) {
+            if (count[t.charAt(i) - 'a'] == 0)
                 return false;
-            count[t[i]-'a']--;
+            count[t.charAt(i) - 'a']--;
         }
+
         return true;
     }
-};
+}

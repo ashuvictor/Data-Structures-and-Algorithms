@@ -13,24 +13,23 @@ Output: 5
 Explanation: The last word is "World" with length 5.
 
 class Solution {
-public:
-    int lengthOfLastWord(string s) {
-        int lastIndex=s.size()-1;
-        int result=0;
-        while(s[lastIndex]==' ')
+    public int lengthOfLastWord(String s) {
+        int lastIndex = s.length() - 1;
+        int result = 0;
+
+        // Skip trailing spaces
+        while (lastIndex >= 0 && s.charAt(lastIndex) == ' ')
             lastIndex--;
-        while(s[lastIndex]!=' ')
-        {
+
+        // Count last word length
+        while (lastIndex >= 0 && s.charAt(lastIndex) != ' ') {
             result++;
-            if(lastIndex>0)
-                lastIndex--;
-            else
-                break;
+            lastIndex--;
         }
+
         return result;
     }
-};
-
+}
 
 
 Given a string s consists of upper/lower-case alphabets and empty space characters ' ', return the length of last word in the string.
@@ -47,20 +46,22 @@ Given s = "Hello World",
 return 5 as length("World") = 5.
 
 
-int length = 0;
-    for(int i = A.size()-1 ; i >=0; i--){
-        char c = A[i];
-        if(isspace(c)){
-            if(length != 0){
-                return length;
-            }
-            else{
-                length = 0;    
+class Solution {
+    public int lengthOfLastWord(String A) {
+        int length = 0;
+
+        for (int i = A.length() - 1; i >= 0; i--) {
+            char c = A.charAt(i);
+
+            if (Character.isWhitespace(c)) {
+                if (length != 0) {
+                    return length;
+                }
+            } else {
+                length++;
             }
         }
-        else{
-            length++;    
-        }
+
+        return length;
     }
-    
-    return length;
+}

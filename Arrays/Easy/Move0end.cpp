@@ -1,9 +1,18 @@
 /*
 Move 0 to end*/
-   int j=0;
-    for(int i=0;i<A.size();i++){
-        if(A[i]!=0)
-        {swap(A[i],A[j]);
-        j++;}
+import java.util.*;
+
+class Solution {
+    public ArrayList<Integer> moveZeroes(ArrayList<Integer> A) {
+        int j = 0;
+
+        for (int i = 0; i < A.size(); i++) {
+            if (A.get(i) != 0) {
+                Collections.swap(A, i, j);
+                j++;
+            }
+        }
+
+        return A;
     }
-    return A;
+}
